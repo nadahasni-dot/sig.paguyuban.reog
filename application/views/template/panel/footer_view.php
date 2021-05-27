@@ -150,6 +150,16 @@
   <?php if ($menu == 'paguyuban') : ?>
     <script src="<?= base_url('assets/scripts/paguyuban.js') ?>"></script>
   <?php endif; ?>
+  <?php if ($sub_menu == 'detail_paguyuban') : ?>
+    <script>
+      initMapSingleMarker(
+        <?= $paguyuban['lat_paguyuban'] ?>,
+        <?= $paguyuban['lng_paguyuban'] ?>,
+        '<?= $paguyuban['nama_paguyuban'] ?>',
+        '<?= $paguyuban['alamat_paguyuban'] ?>',
+      );
+    </script>
+  <?php endif; ?>
   <?php if ($menu == 'penyakit_pakar') : ?>
     <script src="<?= base_url('assets/scripts/penyakit.pakar.js') ?>"></script>
   <?php endif; ?>

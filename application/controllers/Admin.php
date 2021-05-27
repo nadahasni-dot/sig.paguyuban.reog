@@ -307,7 +307,7 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Detail Paguyuban";
         $data['menu'] = "paguyuban";
-        $data['sub_menu'] = null;
+        $data['sub_menu'] = "detail_paguyuban";
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
@@ -329,9 +329,9 @@ class Admin extends CI_Controller
     }
 
     // * untuk menghapus paguyuban
-    public function deletePenyakit($id_paguyuban)
+    public function deletePaguyuban($id_paguyuban)
     {
-        if ($this->Penyakit_model->deletePenyakit('id_paguyuban', $id_paguyuban)) { // * jika berhasil menghapus
+        if ($this->Paguyuban_model->deletePaguyuban('id_paguyuban', $id_paguyuban)) { // * jika berhasil menghapus
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus paguyuban</div>');
 
             redirect('admin/paguyuban');

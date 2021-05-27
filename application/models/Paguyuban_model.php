@@ -36,7 +36,7 @@ class Paguyuban_model extends CI_Model
         }
     }
 
-    public function deletePaguyuban($tipe, $param = 'id_paguyuban')
+    public function deletePaguyuban($tipe = 'id_paguyuban', $param)
     {
         if ($tipe == 'id_paguyuban') {
             return $this->db->delete('tb_paguyuban', ['id_paguyuban' => $param]);        
