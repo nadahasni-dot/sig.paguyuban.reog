@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Bulan Mei 2021 pada 09.29
+-- Waktu pembuatan: 27 Bulan Mei 2021 pada 11.31
 -- Versi server: 10.4.17-MariaDB
 -- Versi PHP: 7.4.14
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `tb_jasa` (
   `id_jasa` int(11) NOT NULL,
   `id_paguyuban` int(11) NOT NULL,
-  `nama_jasa` int(11) NOT NULL,
+  `nama_jasa` varchar(255) NOT NULL,
   `deskripsi_jasa` text NOT NULL,
   `foto_jasa` varchar(255) NOT NULL,
   `harga_jasa` int(11) NOT NULL,
@@ -58,6 +58,13 @@ CREATE TABLE `tb_paguyuban` (
   `paguyuban_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `tb_paguyuban`
+--
+
+INSERT INTO `tb_paguyuban` (`id_paguyuban`, `id_user`, `nama_paguyuban`, `deskripsi_paguyuban`, `alamat_paguyuban`, `telepon_paguyuban`, `foto_paguyuban`, `lat_paguyuban`, `lng_paguyuban`, `paguyuban_created`, `paguyuban_updated`) VALUES
+(3, 4, 'Sanggar seni reog SINGO BROJO', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur imperdiet neque sed gravida cursus. Sed fringilla enim sit amet pharetra semper. Cras scelerisque, ante quis faucibus ornare, diam neque sodales tortor, quis luctus nisl metus fringilla nulla. Curabitur porta facilisis purus. Aliquam elementum ultrices maximus. Aliquam non consequat quam. Duis eros nibh, tristique vel varius ut, fringilla pellentesque tortor. Vestibulum maximus et risus cursus varius. Donec dignissim ipsum a nunc volutpat, et malesuada tellus vestibulum. In hac habitasse platea dictumst. Pellentesque volutpat lorem sed tortor consequat, a feugiat felis commodo. Suspendisse aliquam, dui ut commodo bibendum, orci sem aliquam ante, et hendrerit lorem leo ut nulla. Mauris quis congue sem. Phasellus ultricies volutpat vestibulum.', 'Tegal Banteng, Kesilir, Wuluhan, Jember Regency, East Java 68162', '081234567890', 'e0037bb77295669076069be935f60e0f.jpg', -8.3462665, 113.5756993, 1622107669, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -66,6 +73,7 @@ CREATE TABLE `tb_paguyuban` (
 
 CREATE TABLE `tb_reservasi` (
   `id_reservasi` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `id_jasa` int(11) NOT NULL,
   `id_paguyuban` int(11) NOT NULL,
   `tanggal_reservasi` date NOT NULL,
@@ -121,9 +129,19 @@ CREATE TABLE `tb_user` (
   `role` int(1) NOT NULL,
   `foto_user` varchar(255) NOT NULL,
   `status_user` int(1) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `user_created` int(11) NOT NULL,
   `user_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_user`
+--
+
+INSERT INTO `tb_user` (`id_user`, `username`, `telepon_user`, `email`, `role`, `foto_user`, `status_user`, `password`, `user_created`, `user_updated`) VALUES
+(2, 'Admin Satu', '085735678159', 'nadasthing@gmail.com', 1, 'user-no-image.jpg', 1, '$2y$10$9mezwWpG01.nAPoUkKEvPO1Fa03NcEA0WEZdoazkiT2iglF.TvY52', 1621941297, NULL),
+(3, 'Umum 1', '081234567890', 'umum1@gmail.com', 3, 'user-no-image.jpg', 1, '$2y$10$tUL95YQqpYLUwLa1N2mheeHXeik9WapnZHJlDeKSvImXjk9A.nTlW', 1621943558, 1621944186),
+(4, 'Paguyuban 1', '089765432123', 'paguyuban@gmail.com', 2, 'user-no-image.jpg', 1, '$2y$10$ff//l6EG7pG0s/R0HHqqjOPlK2BimpdNw6CDqsBtVXSmuHkJMc.H6', 1621943628, 1621944175);
 
 --
 -- Indexes for dumped tables
@@ -149,7 +167,8 @@ ALTER TABLE `tb_paguyuban`
 ALTER TABLE `tb_reservasi`
   ADD PRIMARY KEY (`id_reservasi`),
   ADD KEY `id_jasa` (`id_jasa`),
-  ADD KEY `id_paguyuban` (`id_paguyuban`);
+  ADD KEY `id_paguyuban` (`id_paguyuban`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indeks untuk tabel `tb_token`
@@ -179,19 +198,19 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT untuk tabel `tb_jasa`
 --
 ALTER TABLE `tb_jasa`
-  MODIFY `id_jasa` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jasa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_paguyuban`
 --
 ALTER TABLE `tb_paguyuban`
-  MODIFY `id_paguyuban` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_paguyuban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_reservasi`
 --
 ALTER TABLE `tb_reservasi`
-  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_token`
@@ -203,13 +222,13 @@ ALTER TABLE `tb_token`
 -- AUTO_INCREMENT untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_user`
 --
 ALTER TABLE `tb_user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -232,7 +251,8 @@ ALTER TABLE `tb_paguyuban`
 --
 ALTER TABLE `tb_reservasi`
   ADD CONSTRAINT `tb_reservasi_ibfk_1` FOREIGN KEY (`id_jasa`) REFERENCES `tb_jasa` (`id_jasa`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tb_reservasi_ibfk_2` FOREIGN KEY (`id_paguyuban`) REFERENCES `tb_paguyuban` (`id_paguyuban`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `tb_reservasi_ibfk_2` FOREIGN KEY (`id_paguyuban`) REFERENCES `tb_paguyuban` (`id_paguyuban`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `tb_reservasi_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `tb_user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `tb_token`
