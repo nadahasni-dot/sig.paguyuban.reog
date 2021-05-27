@@ -20,34 +20,32 @@ function initMap() {
 		zoom: options.jember.zoom,
 	});
 
-	// L.tileLayer(
-	// 	`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}`,
-	// 	{
-	// 		attribution:
-	// 			'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-	// 		maxZoom: 18,
-	// 		id: "mapbox/streets-v11",
-	// 		tileSize: 512,
-	// 		zoomOffset: -1,
-	// 		accessToken: TOKEN,
-	// 	}
-	// ).addTo(map);
+	L.tileLayer(
+		`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}`,
+		{
+			attribution:
+				'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+			maxZoom: 18,
+			id: "mapbox/streets-v11",
+			tileSize: 512,
+			zoomOffset: -1,
+			accessToken: TOKEN,
+		}
+	).addTo(map);
 
-	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-		attribution:
-			'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	}).addTo(map);
-
-	map.invalidateSize();
+	// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+	// 	attribution:
+	// 		'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	// }).addTo(map);
 }
 
 function initMapContact() {
 	map = L.map("mapContact", {
 		center: [options.jti.lat, options.jti.lng],
 		zoom: options.jti.zoom,
-	});	
+	});
 
-    L.tileLayer(
+	L.tileLayer(
 		`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}`,
 		{
 			attribution:
@@ -58,19 +56,23 @@ function initMapContact() {
 			zoomOffset: -1,
 			accessToken: TOKEN,
 		}
-	).addTo(map);    
+	).addTo(map);
 
-    var jtiMarker = L.marker([options.jti.lat, options.jti.lng]).addTo(map);
-    jtiMarker.bindPopup("<b>Jurusan Teknologi Informasi</b><br>POLITKENIK NEGERI JEMBER.").openPopup();
+	let jtiMarker = L.marker([options.jti.lat, options.jti.lng]).addTo(map);
+	jtiMarker
+		.bindPopup(
+			"<b>Jurusan Teknologi Informasi</b><br>POLITKENIK NEGERI JEMBER."
+		)
+		.openPopup();
 }
 
 function initMapSingleMarker(lat, lng, name, alamat) {
-    map = L.map("map", {
+	map = L.map("map", {
 		center: [lat, lng],
 		zoom: 14,
-	});	
+	});
 
-    L.tileLayer(
+	L.tileLayer(
 		`https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}`,
 		{
 			attribution:
@@ -81,12 +83,23 @@ function initMapSingleMarker(lat, lng, name, alamat) {
 			zoomOffset: -1,
 			accessToken: TOKEN,
 		}
-	).addTo(map);    
+	).addTo(map);
 
-    var jtiMarker = L.marker([lat, lng]).addTo(map);
-    jtiMarker.bindPopup(`<b>${name}</b><br>${alamat}`).openPopup();
+	let jtiMarker = L.marker([lat, lng]).addTo(map);
+	jtiMarker.bindPopup(`<b>${name}</b><br>${alamat}`).openPopup();
 }
 
 function onMapClick(e) {
 	alert("You clicked the map at " + e.latlng);
+}
+
+function onMapClickMove(e) {
+	console.log(e);
+	map.panTo(e.latlng);
+}
+
+function addMarker({lat, lng, name, alamat, idPaguyuban}) {
+	let marker = L.marker([lat, lng]).addTo(map);
+	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/admin/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
+	marker.on('click', onMapClickMove);
 }

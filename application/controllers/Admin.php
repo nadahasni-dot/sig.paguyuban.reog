@@ -28,11 +28,12 @@ class Admin extends CI_Controller
         $data['sub_menu_action'] = null;
         // user data
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        // $data['count_paguyuban'] = $this->Penyakit_model->countPenyakit('all');
-        // $data['count_jasa'] = $this->Jasa_model->countJasa('all');
-        // $data['count_reservasi'] = $this->Reservasi_model->countReservasi('all');
-        // $data['count_pakar'] = $this->User_model->countUser('all');
+        $data['count_user'] = $this->User_model->countUser('role', 3);        
+        $data['count_paguyuban'] = $this->Paguyuban_model->countPaguyuban('all');
+        $data['count_jasa'] = $this->Jasa_model->countJasa('all');
+        $data['count_transaksi'] = $this->Transaksi_model->countTransaksi('confirmed');
 
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
         // $data['hasil_paguyuban'] = $this->Hasil_model->getHasil('chart_paguyuban');
         // $data['hasil_usia'] = $this->Hasil_model->getHasil('chart_usia');
         // $data['hasil_jenis_kelamin'] = $this->Hasil_model->getHasil('chart_jenis_kelamin');
@@ -611,7 +612,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
         $data['transaksi'] = $this->Transaksi_model->getTransaksi('all');
-        $data['reservasi'] = $this->Reservasi_model->getReservasi('all');            
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('all');
 
         // validation forms                
         $this->form_validation->set_rules('id_reservasi', 'Reservasi', 'required|trim');

@@ -68,7 +68,8 @@ class User_model extends CI_Model
     }
 
     public function countUser($tipe, $param = NULL) {
-        if ($tipe == 'all') {
+        if ($tipe == 'role') {
+            $this->db->where('role', $param);
             return $this->db->count_all_results('tb_user');
         }
     }

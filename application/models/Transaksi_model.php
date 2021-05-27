@@ -42,4 +42,11 @@ class Transaksi_model extends CI_Model
             return $this->db->delete('tb_transaksi', ['id_transaksi' => $param]);
         }
     }
+
+    public function countTransaksi($tipe, $param = NULL) {
+        if ($tipe == 'confirmed') {
+            $this->db->where('status_transaksi', 1);
+            return $this->db->count_all_results('tb_transaksi');
+        }
+    }
 }
