@@ -36,7 +36,7 @@ $(function () {
 	$("#allPost").on("click", ".action-edit", function (e) {
 		href = $(this).attr("href");
 		e.preventDefault();
-		$.get(EDIT_PENGETAHUAN + href, function (data) {
+		$.get(EDIT_RESERVASI + href, function (data) {
 			$("#editBody").html(data);
 			$("#edit-modal").modal("show");
 			$(".select2").select2();

@@ -14,7 +14,7 @@ class Admin extends CI_Controller
         $this->load->model('User_model');
         $this->load->model('Paguyuban_model');
         $this->load->model('Jasa_model');
-        // $this->load->model('Pengetahuan_model');
+        $this->load->model('Reservasi_model');
         // $this->load->model('Penyakit_model');
         // $this->load->model('Hasil_model');
     }
@@ -30,7 +30,7 @@ class Admin extends CI_Controller
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         // $data['count_paguyuban'] = $this->Penyakit_model->countPenyakit('all');
         // $data['count_jasa'] = $this->Jasa_model->countJasa('all');
-        // $data['count_pengetahuan'] = $this->Pengetahuan_model->countPengetahuan('all');
+        // $data['count_reservasi'] = $this->Reservasi_model->countReservasi('all');
         // $data['count_pakar'] = $this->User_model->countUser('all');
 
         // $data['hasil_paguyuban'] = $this->Hasil_model->getHasil('chart_paguyuban');
@@ -357,7 +357,10 @@ class Admin extends CI_Controller
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
 
         // validation forms                
+        $this->form_validation->set_rules('id_paguyuban', 'Paguyuban', 'required|trim');
         $this->form_validation->set_rules('nama_jasa', 'Jasa', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_jasa', 'Deskripsi', 'required|trim');
+        $this->form_validation->set_rules('harga_jasa', 'Harga', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
@@ -371,7 +374,7 @@ class Admin extends CI_Controller
             $nama_jasa = $this->input->post('nama_jasa');
             $deskripsi_jasa = $this->input->post('deskripsi_jasa');
             $harga_jasa = $this->input->post('harga_jasa');
-            
+
             if ($submitType == 'Tambah') { // * jika tambah data
 
                 if ($_FILES['foto_jasa']['error'] != 4) {
@@ -455,101 +458,115 @@ class Admin extends CI_Controller
     }
     // * halaman jasa ===================================================================================
 
-    // * halaman pengetahuan ===================================================================================
-    public function pengetahuan()
+    // * halaman reservasi ===================================================================================
+    public function reservasi()
     {
-        $data['title'] = "Pengetahuan";
-        $data['menu'] = "pengetahuan";
+        $data['title'] = "Reservasi";
+        $data['menu'] = "reservasi";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+        $data['umum'] = $this->User_model->getUser('role', 3);
 
-        $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('all');
-        $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('all');
         $data['jasa'] = $this->Jasa_model->getJasa('all');
 
-        // validation forms                
-        $this->form_validation->set_rules('id_paguyuban', 'Penyakit', 'required|trim');
-        $this->form_validation->set_rules('id_jasa', 'Jasa', 'required|trim');
-        $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');
+        // validation forms
+        $this->form_validation->set_rules('id_user', 'Pemesan', 'required|trim');
+        $this->form_validation->set_rules('jasa_paguyuban', 'Jasa', 'required|trim');
+        $this->form_validation->set_rules('tanggal_reservasi', 'Tanggal Reservasi', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_reservasi', 'Deskripsi Reservasi', 'required|trim');
+        $this->form_validation->set_rules('status_reservasi', 'Status Reservasi', 'required|trim|numeric');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
             $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/pengetahuan_admin_view');
+            $this->load->view('admin/reservasi_admin_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $id_paguyuban = $this->input->post('id_paguyuban');
-            $id_jasa = $this->input->post('id_jasa');
-            $mb = $this->input->post('cf_pakar');
+            $id_user = $this->input->post('id_user');
+            $tanggal_reservasi = $this->input->post('tanggal_reservasi');
+            $deskripsi_reservasi = $this->input->post('deskripsi_reservasi');
+            $status_reservasi = $this->input->post('status_reservasi');
+            $jasa_paguyuban = explode('.', $this->input->post('jasa_paguyuban'));
+            $id_jasa = $jasa_paguyuban[0];
+            $id_paguyuban = $jasa_paguyuban[1];
 
             if ($submitType == 'Tambah') { // * jika tambah data
 
                 // * data jasa yang akan diinput
-                $data_pengetahuan = array(
-                    'id_paguyuban' => $id_paguyuban,
+                $data = array(
+                    'id_user' => $id_user,
                     'id_jasa' => $id_jasa,
-                    'cf_pakar' => $mb,
+                    'id_paguyuban' => $id_paguyuban,
+                    'tanggal_reservasi' => $tanggal_reservasi,
+                    'deskripsi_reservasi' => $deskripsi_reservasi,
+                    'status_reservasi' => $status_reservasi,
+                    'reservasi_created' => time(),
                 );
 
-                if ($this->Pengetahuan_model->insertPengetahuan($data_pengetahuan)) { // * jika berhasil input pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan pengetahuan</div>');
+                if ($this->Reservasi_model->insertReservasi($data)) { // * jika berhasil input reservasi
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan reservasi</div>');
 
-                    redirect('admin/pengetahuan');
-                } else { // ! jika gagal input pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan pengetahuan</div>');
+                    redirect('admin/reservasi');
+                } else { // ! jika gagal input reservasi
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan reservasi</div>');
 
-                    redirect('admin/pengetahuan');
+                    redirect('admin/reservasi');
                 }
             } else { // * jika edit data
-                $id_basis_pengetahuan = $this->input->post('id_basis_pengetahuan');
+                $id_reservasi = $this->input->post('id_reservasi');
 
-                $data_update_pengetahuan = array(
-                    'id_paguyuban' => $id_paguyuban,
+                $data = array(
+                    'id_user' => $id_user,
                     'id_jasa' => $id_jasa,
-                    'cf_pakar' => $mb,
+                    'id_paguyuban' => $id_paguyuban,
+                    'tanggal_reservasi' => $tanggal_reservasi,
+                    'deskripsi_reservasi' => $deskripsi_reservasi,
+                    'status_reservasi' => $status_reservasi,
+                    'reservasi_updated' => time(),
                 );
 
-                if ($this->Pengetahuan_model->updatePengetahuan('id_basis_pengetahuan', $data_update_pengetahuan, $id_basis_pengetahuan)) { // * jika berhasil update pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah pengetahuan</div>');
+                if ($this->Reservasi_model->updateReservasi('id_reservasi', $data, $id_reservasi)) { // * jika berhasil update reservasi
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah reservasi</div>');
 
-                    redirect('admin/pengetahuan');
-                } else { // ! jika gagal update pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah pengetahuan</div>');
+                    redirect('admin/reservasi');
+                } else { // ! jika gagal update reservasi
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah reservasi</div>');
 
-                    redirect('admin/pengetahuan');
+                    redirect('admin/reservasi');
                 }
             }
         }
     }
 
-    // * untuk menampilkan detail pengetahuan
-    public function editPengetahuan($id_basis_pengetahuan)
+    // * untuk menampilkan detail reservasi
+    public function editReservasi($id_reservasi)
     {
-        $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan);
-        $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('id_reservasi', $id_reservasi);        
         $data['jasa'] = $this->Jasa_model->getJasa('all');
+        $data['umum'] = $this->User_model->getUser('role', 3);
 
-        $this->load->view('admin/ajax/edit_pengetahuan_form', $data);
+        $this->load->view('admin/ajax/edit_reservasi_form', $data);
     }
 
-    // * untuk menghapus pengetahuan
-    public function deletePengetahuan($id_basis_pengetahuan)
+    // * untuk menghapus reservasi
+    public function deleteReservasi($id_reservasi)
     {
-        if ($this->Pengetahuan_model->deletePengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus pengetahuan</div>');
+        if ($this->Reservasi_model->deleteReservasi('id_reservasi', $id_reservasi)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus reservasi</div>');
 
-            redirect('admin/pengetahuan');
+            redirect('admin/reservasi');
         } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus pengetahuan</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus reservasi</div>');
 
-            redirect('admin/pengetahuan');
+            redirect('admin/reservasi');
         }
     }
-    // * halaman pengetahuan ===================================================================================
+    // * halaman reservasi ===================================================================================
 
     // * halaman hasil diagnosa
     public function hasildiagnosa()

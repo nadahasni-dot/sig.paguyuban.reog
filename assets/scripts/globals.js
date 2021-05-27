@@ -3,7 +3,7 @@ var EDIT_PENGGUNA = `${BASE_URL}/admin/editpengguna/`;
 var EDIT_JASA = `${BASE_URL}/admin/editjasa/`;
 var EDIT_KONDISI = `${BASE_URL}/admin/editkondisi/`;
 var EDIT_PAGUYUBAN = `${BASE_URL}/admin/editpaguyuban/`;
-var EDIT_PENGETAHUAN = `${BASE_URL}/admin/editpengetahuan/`;
+var EDIT_RESERVASI = `${BASE_URL}/admin/editreservasi/`;
 
 var EDIT_PENYAKIT_PAKAR = `${BASE_URL}/pakar/editpenyakit/`;
 var EDIT_GEJALA_PAKAR = `${BASE_URL}/pakar/editgejala/`;

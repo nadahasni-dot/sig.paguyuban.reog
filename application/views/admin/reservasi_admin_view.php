@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Pengetahuan</h1>
+                    <h1>Reservasi</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= base_url('admin'); ?>">Beranda</a></li>
-                        <li class="breadcrumb-item active">Pengetahuan</li>
+                        <li class="breadcrumb-item active">Reservasi</li>
                     </ol>
                 </div>
             </div>
@@ -24,49 +24,55 @@
                 <div class="col-12">
                     <div class="card card-outline card-info">
                         <div class="card-header">
-                            <h2 class="card-title">Daftar Pengetahuan</h2>
+                            <h2 class="card-title">Daftar Reservasi</h2>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
                             <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>', '</div>') ?>
                             <?= $this->session->flashdata('message'); ?>
 
-                            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-tambah"><i class="fas fa-plus mr-2"></i>Tambah Pengetahuan</button>
+                            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-tambah"><i class="fas fa-plus mr-2"></i>Tambah Reservasi</button>
 
                             <table id="allPost" class="table table-bordered table-striped table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Penyakit</th>
-                                        <th>Nama Gejala</th>
-                                        <th>CF PAKAR</th>                                        
+                                        <th>Tangal Reservasi</th>
+                                        <th>Pemesan</th>
+                                        <th>Jasa</th>
+                                        <th>Paguyuban</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    foreach ($pengetahuan as $row) :
+                                    foreach ($reservasi as $row) :
                                     ?>
                                         <tr>
                                             <td class="align-middle"><?= $no++; ?></td>
                                             <td class="align-middle">
-                                                <p class="m-0"><a href="<?= $row['id_basis_pengetahuan']; ?>" class="h6 action-edit"><?= $row['nama_penyakit']; ?></a></p>
+                                                <p class="m-0"><a href="<?= $row['id_reservasi']; ?>" class="h6 action-edit"><?= date('d M Y', strtotime($row['tanggal_reservasi'])); ?></a></p>
                                                 <p class="m-0">
-                                                    <a href="<?= $row['id_basis_pengetahuan']; ?>" class="text-small text-danger action-edit">Edit</a> |
-                                                    <a href="<?= base_url('admin/deletepengetahuan/') . $row['id_basis_pengetahuan']; ?>" class="text-small text-danger action-delete">Hapus</a>
+                                                    <a href="<?= $row['id_reservasi']; ?>" class="text-small text-danger action-edit">Edit</a> |
+                                                    <a href="<?= base_url('admin/deletereservasi/') . $row['id_reservasi']; ?>" class="text-small text-danger action-delete">Hapus</a>
                                                 </p>
                                             </td>
-                                            <td class="align-middle"><?= $row['nama_gejala']; ?></td>
-                                            <td class="align-middle"><?= $row['cf_pakar']; ?></td>                                            
+                                            <td class="align-middle"><?= $row['username']; ?></td>
+                                            <td class="align-middle"><?= $row['nama_jasa']; ?></td>
+                                            <td class="align-middle"><?= $row['nama_paguyuban']; ?></td>
+                                            <td class="align-middle"><?= $row['status_reservasi'] == 0 ? 'Belum Ddikonfirmasi' : 'Sudah Dikonfirmasi'; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Penyakit</th>
-                                        <th>Nama Gejala</th>
-                                        <th>CF PAKAR</th>                                        
+                                        <th>Tangal Reservasi</th>
+                                        <th>Pemesan</th>
+                                        <th>Jasa</th>
+                                        <th>Paguyuban</th>
+                                        <th>Status</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -90,34 +96,46 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Pengetahuan</h4>
+                    <h4 class="modal-title">Tambah Reservasi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="namaPenyakitAdd">Nama Penyakit</label>
-                        <select id="namaPenyakitAdd" name="id_penyakit" class="form-control select2" style="width: 100%;" required>
-                            <option selected value="">Pilih Penyakit</option>
-                            <?php foreach($penyakit as $row) : ?>
-                                <option value="<?= $row['id_penyakit'] ?>"><?= $row['nama_penyakit'] ?></option>
+                        <label for="pemesanAdd">Pemesan</label>
+                        <select id="pemesanAdd" name="id_user" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Pemesan</option>
+                            <?php foreach ($umum as $row) : ?>
+                                <option value="<?= $row['id_user'] ?>"><?= $row['username'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="namaGejalaAdd">Gejala Gejala</label>
-                        <select id="namaGejalaAdd" name="id_gejala" class="form-control select2" style="width: 100%;" required>
-                            <option selected value="">Pilih Gejala</option>
-                            <?php foreach($gejala as $row) : ?>
-                                <option value="<?= $row['id_gejala'] ?>"><?= $row['nama_gejala'] ?></option>
+                        <label for="namaJasaAdd">Jasa</label>
+                        <select id="namaJasaAdd" name="jasa_paguyuban" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Jasa</option>
+                            <?php foreach ($jasa as $row) : ?>
+                                <option value="<?= $row['id_jasa'] . '.' . $row['id_paguyuban'] ?>"><?= $row['nama_jasa'] . ' [' . $row['nama_paguyuban'] . ']' ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="cfPakarAdd">CF PAKAR</label>
-                        <input id="cfPakarAdd" type="number" step="0.1" class="form-control" name="cf_pakar" placeholder="mb dalam decimal (contoh: 1.0, 0.4, dst)" required>
-                    </div>                    
+                        <label for="tanggalAdd">Tanggal</label>
+                        <input id="tanggalAdd" type="date" class="form-control" name="tanggal_reservasi" placeholder="tanggal reservasi" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deskripsiAdd">Deskripsi</label>
+                        <textarea name="deskripsi_reservasi" id="deskripsiAdd" cols="30" rows="5" class="form-control" placeholder="Deskripsi reservasi" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="statusAdd">Status</label>
+                        <select id="statusAdd" name="status_reservasi" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Status Reservasi</option>
+                            <option value="0">Belum Dikonfirmasi</option>
+                            <option value="1">Sudah Dikonfirmasi</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -135,7 +153,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edit Pengetahuan</h4>
+                    <h4 class="modal-title">Edit Reservasi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

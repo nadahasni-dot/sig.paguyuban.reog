@@ -175,8 +175,8 @@
   <?php if ($menu == 'kondisi_pakar') : ?>
     <script src="<?= base_url('assets/scripts/kondisi.pakar.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'pengetahuan') : ?>
-    <script src="<?= base_url('assets/scripts/pengetahuan.js') ?>"></script>
+  <?php if ($menu == 'reservasi') : ?>
+    <script src="<?= base_url('assets/scripts/reservasi.js') ?>"></script>
   <?php endif; ?>
   <?php if ($menu == 'pengetahuan_pakar') : ?>
     <script src="<?= base_url('assets/scripts/pengetahuan.pakar.js') ?>"></script>
