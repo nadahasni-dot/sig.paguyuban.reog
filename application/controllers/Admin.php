@@ -13,7 +13,7 @@ class Admin extends CI_Controller
 
         $this->load->model('User_model');
         $this->load->model('Paguyuban_model');
-        // $this->load->model('Kondisi_model');
+        $this->load->model('Jasa_model');
         // $this->load->model('Pengetahuan_model');
         // $this->load->model('Penyakit_model');
         // $this->load->model('Hasil_model');
@@ -29,7 +29,7 @@ class Admin extends CI_Controller
         // user data
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         // $data['count_paguyuban'] = $this->Penyakit_model->countPenyakit('all');
-        // $data['count_gejala'] = $this->Gejala_model->countGejala('all');
+        // $data['count_jasa'] = $this->Jasa_model->countJasa('all');
         // $data['count_pengetahuan'] = $this->Pengetahuan_model->countPengetahuan('all');
         // $data['count_pakar'] = $this->User_model->countUser('all');
 
@@ -343,89 +343,117 @@ class Admin extends CI_Controller
     }
     // * halaman pengguna ===================================================================================
 
-    // * halaman gejala ===================================================================================
-    public function gejala()
+    // * halaman jasa ===================================================================================
+    public function jasa()
     {
-        $data['title'] = "Gejala";
-        $data['menu'] = "gejala";
+        $data['title'] = "Jasa";
+        $data['menu'] = "jasa";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
+        $data['jasa'] = $this->Jasa_model->getJasa('all');
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
 
         // validation forms                
-        $this->form_validation->set_rules('nama_gejala', 'Gejala', 'required|trim');
+        $this->form_validation->set_rules('nama_jasa', 'Jasa', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
             $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/gejala_admin_view');
+            $this->load->view('admin/jasa_admin_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $nama_gejala = $this->input->post('nama_gejala');
-
+            $id_paguyuban = $this->input->post('id_paguyuban');
+            $nama_jasa = $this->input->post('nama_jasa');
+            $deskripsi_jasa = $this->input->post('deskripsi_jasa');
+            $harga_jasa = $this->input->post('harga_jasa');
+            
             if ($submitType == 'Tambah') { // * jika tambah data
 
-                // * data gejala yang akan diinput
-                $data_gejala = array(
-                    'nama_gejala' => $nama_gejala,
+                if ($_FILES['foto_jasa']['error'] != 4) {
+                    $foto_jasa = $this->upload_image('foto_jasa', './assets/img/jasa/');
+                } else {
+                    $foto_jasa = 'no-image.jpg';
+                }
+
+                // * data jasa yang akan diinput
+                $data = array(
+                    'id_paguyuban' => $id_paguyuban,
+                    'nama_jasa' => $nama_jasa,
+                    'deskripsi_jasa' => $deskripsi_jasa,
+                    'harga_jasa' => $harga_jasa,
+                    'foto_jasa' => $foto_jasa,
+                    'jasa_created' => time(),
                 );
 
-                if ($this->Gejala_model->insertGejala($data_gejala)) { // * jika berhasil input gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan gejala</div>');
+                if ($this->Jasa_model->insertJasa($data)) { // * jika berhasil input jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan jasa</div>');
 
-                    redirect('admin/gejala');
-                } else { // ! jika gagal input gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan gejala</div>');
+                    redirect('admin/jasa');
+                } else { // ! jika gagal input jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan jasa</div>');
 
-                    redirect('admin/gejala');
+                    redirect('admin/jasa');
                 }
             } else { // * jika edit data
-                $id_gejala = $this->input->post('id_gejala');
+                $id_jasa = $this->input->post('id_jasa');
+                $jasa = $this->Jasa_model->getJasa('id_jasa', $id_jasa);
 
-                $data_update_gejala = array(
-                    'nama_gejala' => $nama_gejala,
+                if ($_FILES['foto_jasa']['error'] != 4) {
+                    $foto_jasa = $this->upload_image('foto_jasa', './assets/img/jasa/');
+                } else {
+                    $foto_jasa = $jasa['foto_jasa'];
+                }
+
+                $data = array(
+                    'id_paguyuban' => $id_paguyuban,
+                    'nama_jasa' => $nama_jasa,
+                    'deskripsi_jasa' => $deskripsi_jasa,
+                    'harga_jasa' => $harga_jasa,
+                    'foto_jasa' => $foto_jasa,
+                    'jasa_updated' => time(),
                 );
 
-                if ($this->Gejala_model->updateGejala('id_gejala', $data_update_gejala, $id_gejala)) { // * jika berhasil update gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah gejala</div>');
+                if ($this->Jasa_model->updateJasa('id_jasa', $data, $id_jasa)) { // * jika berhasil update jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah jasa</div>');
 
-                    redirect('admin/gejala');
-                } else { // ! jika gagal update gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah gejala</div>');
+                    redirect('admin/jasa');
+                } else { // ! jika gagal update jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah jasa</div>');
 
-                    redirect('admin/gejala');
+                    redirect('admin/jasa');
                 }
             }
         }
     }
 
-    // * untuk menampilkan detail gejala
-    public function editGejala($id_gejala)
+    // * untuk menampilkan detail jasa
+    public function editJasa($id_jasa)
     {
-        $data['gejala'] = $this->Gejala_model->getGejala('id_gejala', $id_gejala);
+        $data['jasa'] = $this->Jasa_model->getJasa('id_jasa', $id_jasa);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
 
-        $this->load->view('admin/ajax/edit_gejala_form', $data);
+        $this->load->view('admin/ajax/edit_jasa_form', $data);
     }
 
-    // * untuk menghapus gejala
-    public function deleteGejala($id_gejala)
+    // * untuk menghapus jasa
+    public function deleteJasa($id_jasa)
     {
-        if ($this->Gejala_model->deleteGejala('id_gejala', $id_gejala)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus gejala</div>');
+        if ($this->Jasa_model->deleteJasa('id_jasa', $id_jasa)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus jasa</div>');
 
-            redirect('admin/gejala');
+            redirect('admin/jasa');
         } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus gejala</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus jasa</div>');
 
-            redirect('admin/gejala');
+            redirect('admin/jasa');
         }
     }
-    // * halaman gejala ===================================================================================
+    // * halaman jasa ===================================================================================
 
     // * halaman pengetahuan ===================================================================================
     public function pengetahuan()
@@ -439,11 +467,11 @@ class Admin extends CI_Controller
 
         $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('all');
         $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
+        $data['jasa'] = $this->Jasa_model->getJasa('all');
 
         // validation forms                
         $this->form_validation->set_rules('id_paguyuban', 'Penyakit', 'required|trim');
-        $this->form_validation->set_rules('id_gejala', 'Gejala', 'required|trim');
+        $this->form_validation->set_rules('id_jasa', 'Jasa', 'required|trim');
         $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
@@ -455,15 +483,15 @@ class Admin extends CI_Controller
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
             $id_paguyuban = $this->input->post('id_paguyuban');
-            $id_gejala = $this->input->post('id_gejala');
+            $id_jasa = $this->input->post('id_jasa');
             $mb = $this->input->post('cf_pakar');
 
             if ($submitType == 'Tambah') { // * jika tambah data
 
-                // * data gejala yang akan diinput
+                // * data jasa yang akan diinput
                 $data_pengetahuan = array(
                     'id_paguyuban' => $id_paguyuban,
-                    'id_gejala' => $id_gejala,
+                    'id_jasa' => $id_jasa,
                     'cf_pakar' => $mb,
                 );
 
@@ -481,7 +509,7 @@ class Admin extends CI_Controller
 
                 $data_update_pengetahuan = array(
                     'id_paguyuban' => $id_paguyuban,
-                    'id_gejala' => $id_gejala,
+                    'id_jasa' => $id_jasa,
                     'cf_pakar' => $mb,
                 );
 
@@ -503,7 +531,7 @@ class Admin extends CI_Controller
     {
         $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan);
         $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
+        $data['jasa'] = $this->Jasa_model->getJasa('all');
 
         $this->load->view('admin/ajax/edit_pengetahuan_form', $data);
     }

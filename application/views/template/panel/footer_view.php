@@ -163,8 +163,8 @@
   <?php if ($menu == 'penyakit_pakar') : ?>
     <script src="<?= base_url('assets/scripts/penyakit.pakar.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'gejala') : ?>
-    <script src="<?= base_url('assets/scripts/gejala.js') ?>"></script>
+  <?php if ($menu == 'jasa') : ?>
+    <script src="<?= base_url('assets/scripts/jasa.js') ?>"></script>
   <?php endif; ?>
   <?php if ($menu == 'gejala_pakar') : ?>
     <script src="<?= base_url('assets/scripts/gejala.pakar.js') ?>"></script>
