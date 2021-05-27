@@ -37,8 +37,11 @@
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
   <script src="<?= base_url('assets/scripts/globals.js') ?>"></script>
+  <script src="<?= base_url('assets/scripts/map.js') ?>"></script>
 
   <?php if ($menu == 'beranda') : ?>
     <script>
@@ -144,8 +147,8 @@
   <?php if ($menu == 'pengguna') : ?>
     <script src="<?= base_url('assets/scripts/pengguna.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'penyakit') : ?>
-    <script src="<?= base_url('assets/scripts/penyakit.js') ?>"></script>
+  <?php if ($menu == 'paguyuban') : ?>
+    <script src="<?= base_url('assets/scripts/paguyuban.js') ?>"></script>
   <?php endif; ?>
   <?php if ($menu == 'penyakit_pakar') : ?>
     <script src="<?= base_url('assets/scripts/penyakit.pakar.js') ?>"></script>

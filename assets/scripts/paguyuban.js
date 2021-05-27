@@ -36,7 +36,7 @@ $(function () {
 	$("#allPost").on("click", ".action-edit", function (e) {
 		href = $(this).attr("href");
 		e.preventDefault();
-		$.get(EDIT_PENYAKIT + href, function (data) {
+		$.get(EDIT_PAGUYUBAN + href, function (data) {
 			$("#editBody").html(data);
 			$("#edit-modal").modal("show");
 			$(".select2").select2();
@@ -47,23 +47,27 @@ $(function () {
 	bsCustomFileInput.init();
 
 	// handling select image
-	function readURL(input) {
+	function readURL(input, preview) {
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();
 
 			reader.onload = function (e) {
-				$("#penyakitPreview").attr("src", e.target.result);
-				$("#penyakitPreview").removeClass("d-none");
+				$(`#${preview}`).attr("src", e.target.result);
+				$(`#${preview}`).removeClass("d-none");
 			};
 
 			reader.readAsDataURL(input.files[0]); // convert to base64 string
 		}
 	}
 
-	$("#penyakitImage").change(function () {
-		readURL(this);
+	$("#paguyubanImage").change(function () {
+		readURL(this, 'paguyubanPreview');
+	});
+
+	$("#paguyubanImageEdit").change(function () {
+		readURL(this, 'paguyubanPreviewEdit');
 	});
 
 	$("#penyakitArtikel").summernote();
-	$("#penyakitSaranArtikel").summernote();
+	$("#penyakitSaranArtikel").summernote();	
 });

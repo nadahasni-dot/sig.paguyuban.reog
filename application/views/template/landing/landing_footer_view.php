@@ -50,7 +50,7 @@
                         <h3 class="footer_title">
                             Menu
                         </h3>
-                        <ul class="links">                            
+                        <ul class="links">
                             <li><a href="<?= base_url('about') ?>">About</a></li>
                             <li><a href="<?= base_url('paguyuban') ?>">Paguyuban</a></li>
                             <li><a href="<?= base_url('contact') ?>">Contact</a></li>
@@ -176,6 +176,11 @@
 <script src="<?= base_url('assets/landing/') ?>js/jquery.validate.min.js"></script>
 <script src="<?= base_url('assets/landing/') ?>js/mail-script.js"></script>
 
+<!-- map -->
+<script src="<?= base_url('assets/scripts/globals.js') ?>"></script>
+<script src="<?= base_url('assets/scripts/map.js') ?>"></script>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
 <script src="<?= base_url('assets/landing/') ?>js/main.js"></script>
 <script>
@@ -185,6 +190,10 @@
             rightIcon: '<span class="fa fa-caret-down"></span>'
         }
     });
+</script>
+
+<script>
+    initMapContact();
 </script>
 </body>
 

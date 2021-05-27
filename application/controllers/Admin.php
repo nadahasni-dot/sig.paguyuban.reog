@@ -12,7 +12,7 @@ class Admin extends CI_Controller
         }
 
         $this->load->model('User_model');
-        // $this->load->model('Gejala_model');
+        $this->load->model('Paguyuban_model');
         // $this->load->model('Kondisi_model');
         // $this->load->model('Pengetahuan_model');
         // $this->load->model('Penyakit_model');
@@ -28,12 +28,12 @@ class Admin extends CI_Controller
         $data['sub_menu_action'] = null;
         // user data
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        // $data['count_penyakit'] = $this->Penyakit_model->countPenyakit('all');
+        // $data['count_paguyuban'] = $this->Penyakit_model->countPenyakit('all');
         // $data['count_gejala'] = $this->Gejala_model->countGejala('all');
         // $data['count_pengetahuan'] = $this->Pengetahuan_model->countPengetahuan('all');
         // $data['count_pakar'] = $this->User_model->countUser('all');
 
-        // $data['hasil_penyakit'] = $this->Hasil_model->getHasil('chart_penyakit');
+        // $data['hasil_paguyuban'] = $this->Hasil_model->getHasil('chart_paguyuban');
         // $data['hasil_usia'] = $this->Hasil_model->getHasil('chart_usia');
         // $data['hasil_jenis_kelamin'] = $this->Hasil_model->getHasil('chart_jenis_kelamin');
 
@@ -182,150 +182,163 @@ class Admin extends CI_Controller
     }
     // * halaman pengguna ===================================================================================
 
-    // * halaman penyakit ===================================================================================
-    public function penyakit()
+    // * halaman paguyuban ===================================================================================
+    public function paguyuban()
     {
-        $data['title'] = "Penyakit";
-        $data['menu'] = "penyakit";
+        $data['title'] = "Paguyuban";
+        $data['menu'] = "paguyuban";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
+        $data['owner'] = $this->User_model->getUser('role', 2);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
 
         // validation forms                
-        $this->form_validation->set_rules('nama_penyakit', 'Nama Penyakit', 'required|trim');
-        $this->form_validation->set_rules('deskripsi_penyakit', 'Deskripsi', 'required|trim');
-        $this->form_validation->set_rules('saran_penyakit', 'Saran', 'required|trim');
+        $this->form_validation->set_rules('id_user', 'Pemilik Paguyuban', 'required|trim');
+        $this->form_validation->set_rules('nama_paguyuban', 'Nama Paguyuban', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_paguyuban', 'Deskripsi', 'required|trim');
+        $this->form_validation->set_rules('alamat_paguyuban', 'Alamat', 'required|trim');
+        $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
+        $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
             $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/penyakit_admin_view');
+            $this->load->view('admin/paguyuban_admin_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $nama_penyakit = $this->input->post('nama_penyakit');
-            $deskripsi_penyakit = $this->input->post('deskripsi_penyakit');
-            $saran_penyakit = $this->input->post('saran_penyakit');
+            $id_user = $this->input->post('id_user');
+            $nama_paguyuban = $this->input->post('nama_paguyuban');
+            $deskripsi_paguyuban = $this->input->post('deskripsi_paguyuban');
+            $alamat_paguyuban = $this->input->post('alamat_paguyuban');
+            $telepon_paguyuban = $this->input->post('telepon_paguyuban');
+            $lat_paguyuban = $this->input->post('lat_paguyuban');
+            $lng_paguyuban = $this->input->post('lng_paguyuban');
 
             if ($submitType == 'Tambah') { // * jika tambah data
+                $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
+                $user = $this->User_model->getUser('id_user', $id_user);
+                if ($paguyuban) { // jika user telah memiliki paguyuban maka tidak boleh buat
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $user['username'] . ' telah terdaftar pada paguyuban ' . $paguyuban['nama_paguyuban'] . '</div>');
 
-                if ($_FILES['gambar_penyakit']['error'] != 4) {
-                    $gambar_penyakit = $this->upload_image('gambar_penyakit', './assets/img/penyakit/');
-                } else {
-                    $gambar_penyakit = 'no-image.jpg';
+                    redirect('admin/paguyuban');
                 }
 
-                // * data penyakit yang akan diinput
-                $data_penyakit = array(
-                    'nama_penyakit' => $nama_penyakit,
-                    'deskripsi_penyakit' => $deskripsi_penyakit,
-                    'saran_penyakit' => $saran_penyakit,
-                    'gambar_penyakit' => $gambar_penyakit,
+                if ($_FILES['foto_paguyuban']['error'] != 4) {
+                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
+                } else {
+                    $foto_paguyuban = 'no-image.jpg';
+                }
+
+                // * data paguyuban yang akan diinput
+                $data = array(
+                    'id_user' => $id_user,
+                    'nama_paguyuban' => $nama_paguyuban,
+                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
+                    'alamat_paguyuban' => $alamat_paguyuban,
+                    'foto_paguyuban' => $foto_paguyuban,
+                    'telepon_paguyuban' => $telepon_paguyuban,
+                    'lat_paguyuban' => $lat_paguyuban,
+                    'lng_paguyuban' => $lng_paguyuban,
+                    'paguyuban_created' => time(),
                 );
 
-                if ($this->Penyakit_model->insertPenyakit($data_penyakit)) { // * jika berhasil input penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan penyakit</div>');
+                if ($this->Paguyuban_model->insertPaguyuban($data)) { // * jika berhasil input
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan paguyuban</div>');
 
-                    redirect('admin/penyakit');
-                } else { // ! jika gagal input penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan penyakit</div>');
+                    redirect('admin/paguyuban');
+                } else { // ! jika gagal input
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan paguyuban</div>');
 
-                    redirect('admin/penyakit');
+                    redirect('admin/paguyuban');
                 }
-            } else { // * jika edit data
-                $id_penyakit = $this->input->post('id_penyakit');
-                $penyakit = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
+            } else { // * jika edit data                
+                $id_paguyuban = $this->input->post('id_paguyuban');
+                $owner = $this->input->post('owner');
+                $paguyuban = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
 
-                if ($_FILES['gambar_penyakit']['error'] != 4) {
-                    $gambar_penyakit = $this->upload_image('gambar_penyakit', './assets/img/penyakit/');
+                if ($owner != $id_user) { // jika owner dirubah
+                    $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
+                    $user = $this->User_model->getUser('id_user', $id_user);
+                    if ($paguyuban) { // jika user telah memiliki paguyuban maka tidak boleh buat
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $user['username'] . ' telah terdaftar pada paguyuban ' . $paguyuban['nama_paguyuban'] . '</div>');
+
+                        redirect('admin/paguyuban');
+                    }
+                }
+
+                if ($_FILES['foto_paguyuban']['error'] != 4) {
+                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
                 } else {
-                    $gambar_penyakit = $penyakit['gambar_penyakit'];
+                    $foto_paguyuban = $paguyuban['foto_paguyuban'];
                 }
 
-                $data_update_penyakit = array(
-                    'nama_penyakit' => $nama_penyakit,
-                    'deskripsi_penyakit' => $deskripsi_penyakit,
-                    'saran_penyakit' => $saran_penyakit,
-                    'gambar_penyakit' => $gambar_penyakit,
+                $data = array(
+                    'id_user' => $id_user,
+                    'nama_paguyuban' => $nama_paguyuban,
+                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
+                    'alamat_paguyuban' => $alamat_paguyuban,
+                    'foto_paguyuban' => $foto_paguyuban,
+                    'telepon_paguyuban' => $telepon_paguyuban,
+                    'lat_paguyuban' => $lat_paguyuban,
+                    'lng_paguyuban' => $lng_paguyuban,
+                    'paguyuban_updated' => time(),
                 );
 
-                if ($this->Penyakit_model->updatePenyakit('id_penyakit', $data_update_penyakit, $id_penyakit)) { // * jika berhasil update penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah penyakit</div>');
+                if ($this->Paguyuban_model->updatePaguyuban('id_paguyuban', $data, $id_paguyuban)) { // * jika berhasil update
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah paguyuban</div>');
 
-                    redirect('admin/penyakit');
-                } else { // ! jika gagal update penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah penyakit</div>');
+                    redirect('admin/paguyuban');
+                } else { // ! jika gagal update paguyuban
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah paguyuban</div>');
 
-                    redirect('admin/penyakit');
+                    redirect('admin/paguyuban');
                 }
             }
         }
     }
 
-    // * untuk menampilkan artikel dari penyakit
-    public function artikelPenyakit($id_penyakit)
+    // * untuk menampilkan artikel dari paguyuban
+    public function detailPaguyuban($id_paguyuban)
     {
-        $data['title'] = "Artikel Penyakit";
-        $data['menu'] = "penyakit";
+        $data['title'] = "Detail Paguyuban";
+        $data['menu'] = "paguyuban";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
 
-        // validation forms                
-        $this->form_validation->set_rules('penyakit_artikel', 'Penyakit Artikel', 'required|trim');
-        $this->form_validation->set_rules('penyakit_saran_artikel', 'Detail Saran', 'required|trim');
-
-        if ($this->form_validation->run() == FALSE) { // * jika belum input form
-            $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/artikel_penyakit_admin_view');
-            $this->load->view('template/panel/control_view');
-            $this->load->view('template/panel/footer_view');
-        } else { // * jika sudah input                        
-            $penyakit_artikel = $this->input->post('penyakit_artikel');
-            $penyakit_saran_artikel = $this->input->post('penyakit_saran_artikel');
-
-            $data_update_penyakit = array(
-                'penyakit_artikel' => $penyakit_artikel,
-                'penyakit_saran_artikel' => $penyakit_saran_artikel,
-            );
-
-            if ($this->Penyakit_model->updatePenyakit('id_penyakit', $data_update_penyakit, $id_penyakit)) { // * jika berhasil update artikel penyakit
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah artikel penyakit</div>');
-
-                redirect('admin/penyakit');
-            } else { // ! jika gagal update artikel penyakit
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah artikel penyakit</div>');
-
-                redirect('admin/penyakit');
-            }
-        }
+        $this->load->view('template/panel/header_view', $data);
+        $this->load->view('template/panel/sidebar_admin_view');
+        $this->load->view('admin/paguyuban_detail_admin_view');
+        $this->load->view('template/panel/control_view');
+        $this->load->view('template/panel/footer_view');
     }
 
-    // * untuk menampilkan detail penyakit
-    public function editPenyakit($id_penyakit)
+    public function editPaguyuban($id_paguyuban)
     {
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
+        $data['owner'] = $this->User_model->getUser('role', 2);
 
-        $this->load->view('admin/ajax/edit_penyakit_form', $data);
+        $this->load->view('admin/ajax/edit_paguyuban_form', $data);
     }
 
-    // * untuk menghapus penyakit
-    public function deletePenyakit($id_penyakit)
+    // * untuk menghapus paguyuban
+    public function deletePenyakit($id_paguyuban)
     {
-        if ($this->Penyakit_model->deletePenyakit('id_penyakit', $id_penyakit)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus penyakit</div>');
+        if ($this->Penyakit_model->deletePenyakit('id_paguyuban', $id_paguyuban)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus paguyuban</div>');
 
-            redirect('admin/penyakit');
+            redirect('admin/paguyuban');
         } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus penyakit</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus paguyuban</div>');
 
-            redirect('admin/penyakit');
+            redirect('admin/paguyuban');
         }
     }
     // * halaman pengguna ===================================================================================
@@ -425,11 +438,11 @@ class Admin extends CI_Controller
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
         $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('all');
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
+        $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
         $data['gejala'] = $this->Gejala_model->getGejala('all');
 
         // validation forms                
-        $this->form_validation->set_rules('id_penyakit', 'Penyakit', 'required|trim');
+        $this->form_validation->set_rules('id_paguyuban', 'Penyakit', 'required|trim');
         $this->form_validation->set_rules('id_gejala', 'Gejala', 'required|trim');
         $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');
 
@@ -441,7 +454,7 @@ class Admin extends CI_Controller
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $id_penyakit = $this->input->post('id_penyakit');
+            $id_paguyuban = $this->input->post('id_paguyuban');
             $id_gejala = $this->input->post('id_gejala');
             $mb = $this->input->post('cf_pakar');
 
@@ -449,7 +462,7 @@ class Admin extends CI_Controller
 
                 // * data gejala yang akan diinput
                 $data_pengetahuan = array(
-                    'id_penyakit' => $id_penyakit,
+                    'id_paguyuban' => $id_paguyuban,
                     'id_gejala' => $id_gejala,
                     'cf_pakar' => $mb,
                 );
@@ -467,7 +480,7 @@ class Admin extends CI_Controller
                 $id_basis_pengetahuan = $this->input->post('id_basis_pengetahuan');
 
                 $data_update_pengetahuan = array(
-                    'id_penyakit' => $id_penyakit,
+                    'id_paguyuban' => $id_paguyuban,
                     'id_gejala' => $id_gejala,
                     'cf_pakar' => $mb,
                 );
@@ -489,7 +502,7 @@ class Admin extends CI_Controller
     public function editPengetahuan($id_basis_pengetahuan)
     {
         $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan);
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
+        $data['paguyuban'] = $this->Penyakit_model->getPenyakit('all');
         $data['gejala'] = $this->Gejala_model->getGejala('all');
 
         $this->load->view('admin/ajax/edit_pengetahuan_form', $data);

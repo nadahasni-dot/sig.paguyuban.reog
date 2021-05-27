@@ -34,6 +34,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>dist/css/adminlte.min.css">
   <!-- summernote -->
   <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>plugins/summernote/summernote-bs4.css">
+  <!-- leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -52,16 +54,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Right navbar links -->
       <!-- <ul class="navbar-nav ml-auto"> -->
-        <!-- Messages Dropdown Menu -->
-        <!-- <li class="nav-item dropdown">
+      <!-- Messages Dropdown Menu -->
+      <!-- <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
             <i class="far fa-comments"></i>
             <span class="badge badge-danger navbar-badge">3</span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <a href="#" class="dropdown-item"> -->
-              <!-- Message Start -->
-              <!-- <div class="media">
+      <!-- Message Start -->
+      <!-- <div class="media">
                 <img src="<?= base_url('assets/adminlte/'); ?>dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
@@ -72,12 +74,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                 </div>
               </div> -->
-              <!-- Message End -->
-            <!-- </a>
+      <!-- Message End -->
+      <!-- </a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item"> -->
-              <!-- Message Start -->
-              <!-- <div class="media">
+      <!-- Message Start -->
+      <!-- <div class="media">
                 <img src="<?= base_url('assets/adminlte/'); ?>dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
@@ -88,12 +90,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                 </div>
               </div> -->
-              <!-- Message End -->
-            <!-- </a>
+      <!-- Message End -->
+      <!-- </a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item"> -->
-              <!-- Message Start -->
-              <!-- <div class="media">
+      <!-- Message Start -->
+      <!-- <div class="media">
                 <img src="<?= base_url('assets/adminlte/'); ?>dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
@@ -110,8 +112,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
           </div>
         </li> -->
-        <!-- Notifications Dropdown Menu -->
-        <!-- <li class="nav-item dropdown">
+      <!-- Notifications Dropdown Menu -->
+      <!-- <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
             <i class="far fa-bell"></i>
             <span class="badge badge-warning navbar-badge">15</span>
