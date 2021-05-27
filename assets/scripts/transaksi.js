@@ -36,7 +36,7 @@ $(function () {
 	$("#allPost").on("click", ".action-edit", function (e) {
 		href = $(this).attr("href");
 		e.preventDefault();
-		$.get(EDIT_KONDISI + href, function (data) {
+		$.get(EDIT_TRANSAKSI + href, function (data) {
 			$("#editBody").html(data);
 			$("#edit-modal").modal("show");
 			$(".select2").select2();
@@ -45,4 +45,22 @@ $(function () {
 	});
 
 	bsCustomFileInput.init();
+
+	// handling select image
+	function readURL(input, preview) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$(`#${preview}`).attr("src", e.target.result);
+				$(`#${preview}`).removeClass("d-none");
+			};
+
+			reader.readAsDataURL(input.files[0]); // convert to base64 string
+		}
+	}
+
+	$("#buktiImage").change(function () {
+		readURL(this, "buktiPreview");
+	});
 });

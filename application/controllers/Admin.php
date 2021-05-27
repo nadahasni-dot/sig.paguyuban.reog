@@ -15,7 +15,7 @@ class Admin extends CI_Controller
         $this->load->model('Paguyuban_model');
         $this->load->model('Jasa_model');
         $this->load->model('Reservasi_model');
-        // $this->load->model('Penyakit_model');
+        $this->load->model('Transaksi_model');
         // $this->load->model('Hasil_model');
     }
 
@@ -546,7 +546,7 @@ class Admin extends CI_Controller
     // * untuk menampilkan detail reservasi
     public function editReservasi($id_reservasi)
     {
-        $data['reservasi'] = $this->Reservasi_model->getReservasi('id_reservasi', $id_reservasi);        
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('id_reservasi', $id_reservasi);
         $data['jasa'] = $this->Jasa_model->getJasa('all');
         $data['umum'] = $this->User_model->getUser('role', 3);
 
@@ -600,94 +600,119 @@ class Admin extends CI_Controller
         }
     }
 
-    // * halaman kondisi ===================================================================================
-    public function kondisi()
+    // * halaman transaksi ===================================================================================
+    public function transaksi()
     {
-        $data['title'] = "Kondisi";
-        $data['menu'] = "kondisi";
+        $data['title'] = "Transaksi";
+        $data['menu'] = "transaksi";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-        $data['kondisi'] = $this->Kondisi_model->getKondisi('all');
+        $data['transaksi'] = $this->Transaksi_model->getTransaksi('all');
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('all');            
 
         // validation forms                
-        $this->form_validation->set_rules('nama_kondisi', 'Nama Kondisi', 'required|trim');
-        $this->form_validation->set_rules('cf_kondisi', 'CF KONDISI', 'required|trim|decimal');
+        $this->form_validation->set_rules('id_reservasi', 'Reservasi', 'required|trim');
+        $this->form_validation->set_rules('tanggal_transaksi', 'Tanggal', 'required|trim');
+        $this->form_validation->set_rules('nominal_transaksi', 'Nominal', 'required|trim');
+        $this->form_validation->set_rules('status_transaksi', 'Status', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
             $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/kondisi_admin_view');
+            $this->load->view('admin/transaksi_admin_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $nama_kondisi = $this->input->post('nama_kondisi');
-            $bobot = $this->input->post('cf_kondisi');
+            $id_reservasi = $this->input->post('id_reservasi');
+            $tanggal_transaksi = $this->input->post('tanggal_transaksi');
+            $nominal_transaksi = $this->input->post('nominal_transaksi');
+            $status_transaksi = $this->input->post('status_transaksi');
 
             if ($submitType == 'Tambah') { // * jika tambah data
+                if ($_FILES['bukti_transaksi']['error'] != 4) {
+                    $bukti_transaksi = $this->upload_image('bukti_transaksi', './assets/img/transaksi/');
+                } else {
+                    $bukti_transaksi = 'no-image.jpg';
+                }
 
-                // * data kondisi yang akan diinput
-                $data_kondisi = array(
-                    'id_user' => $this->session->userdata('id_user'),
-                    'nama_kondisi' => $nama_kondisi,
-                    'cf_kondisi' => $bobot,
+                // * data transaksi yang akan diinput
+                $data = array(
+                    'id_reservasi' => $id_reservasi,
+                    'tanggal_transaksi' => $tanggal_transaksi,
+                    'nominal_transaksi' => $nominal_transaksi,
+                    'status_transaksi' => $status_transaksi,
+                    'bukti_transaksi' => $bukti_transaksi,
+                    'transaksi_created' => time(),
                 );
 
-                if ($this->Kondisi_model->insertKondisi($data_kondisi)) { // * jika berhasil input kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan kondisi</div>');
+                if ($this->Transaksi_model->insertTransaksi($data)) { // * jika berhasil input transaksi
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan transaksi</div>');
 
-                    redirect('admin/kondisi');
-                } else { // ! jika gagal input kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan kondisi</div>');
+                    redirect('admin/transaksi');
+                } else { // ! jika gagal input transaksi
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan transaksi</div>');
 
-                    redirect('admin/kondisi');
+                    redirect('admin/transaksi');
                 }
             } else { // * jika edit data
-                $id_kondisi = $this->input->post('id_kondisi');
+                $id_transaksi = $this->input->post('id_transaksi');
+                $transaksi = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);
 
-                $data_update_kondisi = array(
-                    'nama_kondisi' => $nama_kondisi,
-                    'cf_kondisi' => $bobot,
+                if ($_FILES['bukti_transaksi']['error'] != 4) {
+                    $bukti_transaksi = $this->upload_image('bukti_transaksi', './assets/img/transaksi/');
+                } else {
+                    $bukti_transaksi = $transaksi['bukti_transaksi'];
+                }
+
+                $data = array(
+                    'id_reservasi' => $id_reservasi,
+                    'tanggal_transaksi' => $tanggal_transaksi,
+                    'nominal_transaksi' => $nominal_transaksi,
+                    'status_transaksi' => $status_transaksi,
+                    'bukti_transaksi' => $bukti_transaksi,
+                    'transaksi_updated' => time(),
                 );
 
-                if ($this->Kondisi_model->updateKondisi('id_kondisi', $data_update_kondisi, $id_kondisi)) { // * jika berhasil update kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah kondisi</div>');
+                if ($this->Transaksi_model->updateTransaksi('id_transaksi', $data, $id_transaksi)) { // * jika berhasil update transaksi
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah transaksi</div>');
 
-                    redirect('admin/kondisi');
-                } else { // ! jika gagal update kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah kondisi</div>');
+                    redirect('admin/transaksi');
+                } else { // ! jika gagal update transaksi
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah transaksi</div>');
 
-                    redirect('admin/kondisi');
+                    redirect('admin/transaksi');
                 }
             }
         }
     }
 
-    // * untuk menampilkan detail kondisi
-    public function editKondisi($id_kondisi)
+    // * untuk menampilkan detail transaksi
+    public function editTransaksi($id_transaksi)
     {
-        $data['kondisi'] = $this->Kondisi_model->getKondisi('id_kondisi', $id_kondisi);
+        $data['transaksi'] = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('all');
 
-        $this->load->view('admin/ajax/edit_kondisi_form', $data);
+        $this->load->view('admin/ajax/edit_transaksi_form', $data);
     }
 
-    // * untuk menghapus kondisi
-    public function deleteKondisi($id_kondisi)
+    // * untuk menghapus transaksi
+    public function deleteTransaksi($id_transaksi)
     {
-        if ($this->Kondisi_model->deleteKondisi('id_kondisi', $id_kondisi)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus kondisi</div>');
+        if ($this->Transaksi_model->deleteTransaksi('id_transaksi', $id_transaksi)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus transaksi</div>');
 
-            redirect('admin/kondisi');
+            redirect('admin/transaksi');
         } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus kondisi</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus transaksi</div>');
 
-            redirect('admin/kondisi');
+            redirect('admin/transaksi');
         }
     }
-    // * halaman kondisi ===================================================================================
+    // * halaman transaksi ===================================================================================
 
     // * halaman password ===================================================================================
     public function password()

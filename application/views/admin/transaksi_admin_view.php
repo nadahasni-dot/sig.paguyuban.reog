@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Kondisi</h1>
+                    <h1>Transaksi</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= base_url('admin'); ?>">Beranda</a></li>
-                        <li class="breadcrumb-item active">Kondisi</li>
+                        <li class="breadcrumb-item active">Transaksi</li>
                     </ol>
                 </div>
             </div>
@@ -24,46 +24,55 @@
                 <div class="col-12">
                     <div class="card card-outline card-info">
                         <div class="card-header">
-                            <h2 class="card-title">Daftar Kondisi</h2>
+                            <h2 class="card-title">Daftar Transaksi</h2>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
                             <?= validation_errors('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>', '</div>') ?>
                             <?= $this->session->flashdata('message'); ?>
 
-                            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-tambah"><i class="fas fa-plus mr-2"></i>Tambah Kondisi</button>
+                            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-tambah"><i class="fas fa-plus mr-2"></i>Tambah Transaksi</button>
 
                             <table id="allPost" class="table table-bordered table-striped table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Kondisi</th>
-                                        <th>CF KONDISI</th>
+                                        <th>Tanggal</th>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        <th>Jasa</th>
+                                        <th>Paguyuban</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $no = 1;
-                                    foreach ($kondisi as $row) :
+                                    foreach ($transaksi as $row) :
                                     ?>
                                         <tr>
                                             <td class="align-middle"><?= $no++; ?></td>
                                             <td class="align-middle">
-                                                <p class="m-0"><a href="<?= $row['id_kondisi']; ?>" class="h6 action-edit"><?= $row['nama_kondisi']; ?></a></p>
+                                                <p class="m-0"><a href="<?= $row['id_transaksi']; ?>" class="h6 action-edit"><?= date('d M Y', strtotime($row['tanggal_transaksi'])) ?></a></p>
                                                 <p class="m-0">
-                                                    <a href="<?= $row['id_kondisi']; ?>" class="text-small text-danger action-edit">Edit</a> |
-                                                    <a href="<?= base_url('admin/deletekondisi/') . $row['id_kondisi']; ?>" class="text-small text-danger action-delete">Hapus</a>
+                                                    <a href="<?= $row['id_transaksi']; ?>" class="text-small text-danger action-edit">Edit</a> |
+                                                    <a href="<?= base_url('admin/deletetransaksi/') . $row['id_transaksi']; ?>" class="text-small text-danger action-delete">Hapus</a>
                                                 </p>
                                             </td>
-                                            <td class="align-middle"><?= $row['cf_kondisi']; ?></td>
+                                            <td class="align-middle"><?= $row['username']; ?></td>
+                                            <td class="align-middle"><?= $row['status_transaksi'] == 0 ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi'; ?></td>
+                                            <td class="align-middle"><?= $row['nama_jasa']; ?></td>
+                                            <td class="align-middle"><?= $row['nama_paguyuban']; ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Kondisi</th>
-                                        <th>CF KONDISI</th>
+                                        <th>Tanggal</th>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        <th>Jasa</th>
+                                        <th>Paguyuban</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -87,19 +96,44 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Kondisi</h4>
+                    <h4 class="modal-title">Tambah Reservasi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="namaKondisiAdd">Nama Kondisi</label>
-                        <input id="namaKondisiAdd" type="text" class="form-control" name="nama_kondisi" placeholder="nama kondisi baru" required>
+                        <label for="reservasiAdd">Reservasi</label>
+                        <select id="reservasiAdd" name="id_reservasi" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Reservasi</option>
+                            <?php foreach ($reservasi as $row) : ?>
+                                <option value="<?= $row['id_reservasi'] ?>"><?= $row['username'] . ' mereservasi ' . $row['nama_jasa'] . ' [' . $row['nama_paguyuban'] . ']' ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="cf_kondisiAdd">Bobot</label>
-                        <input id="cf_kondisiAdd" type="number" step="0.1" class="form-control" name="cf_kondisi" placeholder="bobot dalam decimal (contoh: 1.0, 0.4, dst)" required>
+                        <label for="tanggalAdd">Tanggal</label>
+                        <input id="tanggalAdd" type="date" class="form-control" name="tanggal_transaksi" placeholder="tanggal transaksi" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nominalAdd">Nominal</label>
+                        <input id="nominalAdd" type="number" class="form-control" name="nominal_transaksi" placeholder="nominal transaksi" required>
+                    </div>                    
+                    <div class="form-group">
+                        <label for="statusAdd">Status</label>
+                        <select id="statusAdd" name="status_transaksi" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Status Reservasi</option>
+                            <option value="0">Belum Dikonfirmasi</option>
+                            <option value="1">Sudah Dikonfirmasi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="buktiImage">Bukti Transaksi</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="buktiImage" accept="image/x-png,image/gif,image/jpeg" name="bukti_transaksi" required>
+                            <label class="custom-file-label" for="buktiImage">Choose file</label>
+                            <img style="object-fit: cover; height: 100px; width: 150px;" width="150px" height="100px" src="" alt="bukti" id="buktiPreview" class="img-fluid mt-2 d-none">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -118,7 +152,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edit Kondisi</h4>
+                    <h4 class="modal-title">Edit Transaksi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

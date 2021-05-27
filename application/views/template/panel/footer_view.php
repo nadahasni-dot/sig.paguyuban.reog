@@ -169,8 +169,8 @@
   <?php if ($menu == 'gejala_pakar') : ?>
     <script src="<?= base_url('assets/scripts/gejala.pakar.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'kondisi') : ?>
-    <script src="<?= base_url('assets/scripts/kondisi.js') ?>"></script>
+  <?php if ($menu == 'transaksi') : ?>
+    <script src="<?= base_url('assets/scripts/transaksi.js') ?>"></script>
   <?php endif; ?>
   <?php if ($menu == 'kondisi_pakar') : ?>
     <script src="<?= base_url('assets/scripts/kondisi.pakar.js') ?>"></script>

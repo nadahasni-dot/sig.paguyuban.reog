@@ -1,7 +1,7 @@
 var BASE_URL = window.location.origin + '/sig.paguyuban.reog';
 var EDIT_PENGGUNA = `${BASE_URL}/admin/editpengguna/`;
 var EDIT_JASA = `${BASE_URL}/admin/editjasa/`;
-var EDIT_KONDISI = `${BASE_URL}/admin/editkondisi/`;
+var EDIT_TRANSAKSI = `${BASE_URL}/admin/edittransaksi/`;
 var EDIT_PAGUYUBAN = `${BASE_URL}/admin/editpaguyuban/`;
 var EDIT_RESERVASI = `${BASE_URL}/admin/editreservasi/`;
 
