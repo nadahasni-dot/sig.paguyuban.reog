@@ -5,7 +5,4 @@ var EDIT_TRANSAKSI = `${BASE_URL}/admin/edittransaksi/`;
 var EDIT_PAGUYUBAN = `${BASE_URL}/admin/editpaguyuban/`;
 var EDIT_RESERVASI = `${BASE_URL}/admin/editreservasi/`;
 
-var EDIT_PENYAKIT_PAKAR = `${BASE_URL}/pakar/editpenyakit/`;
-var EDIT_GEJALA_PAKAR = `${BASE_URL}/pakar/editgejala/`;
-var EDIT_KONDISI_PAKAR = `${BASE_URL}/pakar/editkondisi/`;
-var EDIT_PENGETAHUAN_PAKAR = `${BASE_URL}/pakar/editpengetahuan/`;
+var EDIT_JASA_PAGUYUBAN = `${BASE_URL}/paguyuban/editjasa/`;

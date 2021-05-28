@@ -129,34 +129,22 @@
         alamat: '<?= $paguyuban['alamat_paguyuban'] ?>'
       });
     </script>
-  <?php endif; ?>
+  <?php endif; ?>  
 
-  <?php if ($menu == 'penyakit_pakar') : ?>
-    <script src="<?= base_url('assets/scripts/penyakit.pakar.js') ?>"></script>
-  <?php endif; ?>
   <?php if ($menu == 'jasa') : ?>
     <script src="<?= base_url('assets/scripts/jasa.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'gejala_pakar') : ?>
-    <script src="<?= base_url('assets/scripts/gejala.pakar.js') ?>"></script>
+
+  <?php if ($menu == 'jasa_paguyuban') : ?>
+    <script src="<?= base_url('assets/scripts/jasa.paguyuban.js') ?>"></script>
   <?php endif; ?>
+  
   <?php if ($menu == 'transaksi') : ?>
     <script src="<?= base_url('assets/scripts/transaksi.js') ?>"></script>
   <?php endif; ?>
-  <?php if ($menu == 'kondisi_pakar') : ?>
-    <script src="<?= base_url('assets/scripts/kondisi.pakar.js') ?>"></script>
-  <?php endif; ?>
+  
   <?php if ($menu == 'reservasi') : ?>
     <script src="<?= base_url('assets/scripts/reservasi.js') ?>"></script>
-  <?php endif; ?>
-  <?php if ($menu == 'pengetahuan_pakar') : ?>
-    <script src="<?= base_url('assets/scripts/pengetahuan.pakar.js') ?>"></script>
-  <?php endif; ?>
-  <?php if ($menu == 'diagnosa') : ?>
-    <script src="<?= base_url('assets/scripts/diagnosa.js') ?>"></script>
-  <?php endif; ?>
-  <?php if ($menu == 'hasildiagnosa') : ?>
-    <script src="<?= base_url('assets/scripts/hasil.diagnosa.js') ?>"></script>
   <?php endif; ?>
   </body>
 

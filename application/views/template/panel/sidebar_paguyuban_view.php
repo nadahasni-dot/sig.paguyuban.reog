@@ -42,7 +42,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('paguyuban/jasa'); ?>" class="nav-link <?= $menu == 'jasa' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/jasa'); ?>" class="nav-link <?= $menu == 'jasa_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-people-arrows"></i>
               <p>
                 Jasa

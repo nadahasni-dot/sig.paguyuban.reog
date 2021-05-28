@@ -240,21 +240,125 @@ class Paguyuban extends CI_Controller
         }
     }
 
-    // * untuk menghapus paguyuban
-    public function deletePaguyuban($id_paguyuban)
+    // * halaman paguyuban ===================================================================================
+
+    // * halaman jasa ===================================================================================
+    public function jasa()
     {
-        if ($this->Paguyuban_model->deletePaguyuban('id_paguyuban', $id_paguyuban)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus paguyuban</div>');
+        $data['title'] = "Jasa";
+        $data['menu'] = "jasa_paguyuban";
+        $data['sub_menu'] = null;
+        $data['sub_menu_action'] = null;
+        // user data        
+        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
 
-            redirect('paguyuban/paguyuban');
-        } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus paguyuban</div>');
+        if ($data['paguyuban']) {
+            $data['jasa'] = $this->Jasa_model->getJasa('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
 
-            redirect('paguyuban/paguyuban');
+        // validation forms                
+        $this->form_validation->set_rules('id_paguyuban', 'Paguyuban', 'required|trim');
+        $this->form_validation->set_rules('nama_jasa', 'Jasa', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_jasa', 'Deskripsi', 'required|trim');
+        $this->form_validation->set_rules('harga_jasa', 'Harga', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) { // * jika belum input form
+            $this->load->view('template/panel/header_view', $data);
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/jasa_paguyuban_view');
+            $this->load->view('template/panel/control_view');
+            $this->load->view('template/panel/footer_view');
+        } else { // * jika sudah input
+            $submitType = $this->input->post('submit-type');
+
+            $id_paguyuban = $this->input->post('id_paguyuban');
+            $nama_jasa = $this->input->post('nama_jasa');
+            $deskripsi_jasa = $this->input->post('deskripsi_jasa');
+            $harga_jasa = $this->input->post('harga_jasa');
+
+            if ($submitType == 'Tambah') { // * jika tambah data
+
+                if ($_FILES['foto_jasa']['error'] != 4) {
+                    $foto_jasa = $this->upload_image('foto_jasa', './assets/img/jasa/');
+                } else {
+                    $foto_jasa = 'no-image.jpg';
+                }
+
+                // * data jasa yang akan diinput
+                $data = array(
+                    'id_paguyuban' => $id_paguyuban,
+                    'nama_jasa' => $nama_jasa,
+                    'deskripsi_jasa' => $deskripsi_jasa,
+                    'harga_jasa' => $harga_jasa,
+                    'foto_jasa' => $foto_jasa,
+                    'jasa_created' => time(),
+                );
+
+                if ($this->Jasa_model->insertJasa($data)) { // * jika berhasil input jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan jasa</div>');
+
+                    redirect('paguyuban/jasa');
+                } else { // ! jika gagal input jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan jasa</div>');
+
+                    redirect('paguyuban/jasa');
+                }
+            } else { // * jika edit data
+                $id_jasa = $this->input->post('id_jasa');
+                $jasa = $this->Jasa_model->getJasa('id_jasa', $id_jasa);
+
+                if ($_FILES['foto_jasa']['error'] != 4) {
+                    $foto_jasa = $this->upload_image('foto_jasa', './assets/img/jasa/');
+                } else {
+                    $foto_jasa = $jasa['foto_jasa'];
+                }
+
+                $data = array(
+                    'id_paguyuban' => $id_paguyuban,
+                    'nama_jasa' => $nama_jasa,
+                    'deskripsi_jasa' => $deskripsi_jasa,
+                    'harga_jasa' => $harga_jasa,
+                    'foto_jasa' => $foto_jasa,
+                    'jasa_updated' => time(),
+                );
+
+                if ($this->Jasa_model->updateJasa('id_jasa', $data, $id_jasa)) { // * jika berhasil update jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah jasa</div>');
+
+                    redirect('paguyuban/jasa');
+                } else { // ! jika gagal update jasa
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah jasa</div>');
+
+                    redirect('paguyuban/jasa');
+                }
+            }
         }
     }
 
-    // * halaman paguyuban ===================================================================================
+    // * untuk menampilkan detail jasa
+    public function editJasa($id_jasa)
+    {
+        $data['jasa'] = $this->Jasa_model->getJasa('id_jasa', $id_jasa);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+
+        $this->load->view('paguyuban/ajax/edit_jasa_form', $data);
+    }
+
+    // * untuk menghapus jasa
+    public function deleteJasa($id_jasa)
+    {
+        if ($this->Jasa_model->deleteJasa('id_jasa', $id_jasa)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus jasa</div>');
+
+            redirect('paguyuban/jasa');
+        } else { // ! jika gagal menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus jasa</div>');
+
+            redirect('paguyuban/jasa');
+        }
+    }
+    // * halaman jasa ===================================================================================
 
     // * halaman settings ===================================================================================
     public function settings()

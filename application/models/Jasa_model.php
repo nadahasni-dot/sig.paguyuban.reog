@@ -21,6 +21,12 @@ class Jasa_model extends CI_Model
             return $this->db->get('tb_jasa')->result_array();
         }
 
+        if ($tipe == 'all_paguyuban') {
+            $this->db->where('tb_jasa.id_paguyuban', $param);
+            $this->db->join('tb_paguyuban', 'tb_paguyuban.id_paguyuban = tb_jasa.id_paguyuban');
+            return $this->db->get('tb_jasa')->result_array();
+        }
+
         if ($tipe == 'id_jasa') {
             return $this->db->get_where('tb_jasa', ['id_jasa' => $param])->row_array();
         }
