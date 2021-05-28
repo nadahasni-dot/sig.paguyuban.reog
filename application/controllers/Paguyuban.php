@@ -52,507 +52,294 @@ class Paguyuban extends CI_Controller
         $this->load->view('template/panel/footer_view');
     }
 
-    // * halaman penyakit ===================================================================================
-    public function penyakit()
+    // * halaman paguyuban ===================================================================================
+    public function paguyuban()
     {
-        $data['title'] = "Penyakit";
-        $data['menu'] = "penyakit_pakar";
-        $data['sub_menu'] = null;
+        $data['title'] = "Paguyuban";
+        $data['menu'] = "paguyuban_paguyuban";
+        $data['sub_menu'] = "paguyuban_add";
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
 
-        // validation forms                
-        $this->form_validation->set_rules('nama_penyakit', 'Nama Penyakit', 'required|trim');
-        $this->form_validation->set_rules('deskripsi_penyakit', 'Deskripsi', 'required|trim');
-        $this->form_validation->set_rules('saran_penyakit', 'Saran', 'required|trim');
+        // validation forms                        
+        $this->form_validation->set_rules('nama_paguyuban', 'Nama Paguyuban', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_paguyuban', 'Deskripsi', 'required|trim');
+        $this->form_validation->set_rules('alamat_paguyuban', 'Alamat', 'required|trim');
+        $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
+        $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('pakar/penyakit_pakar_view');
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/paguyuban_paguyuban_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $nama_penyakit = $this->input->post('nama_penyakit');
-            $deskripsi_penyakit = $this->input->post('deskripsi_penyakit');
-            $saran_penyakit = $this->input->post('saran_penyakit');
+            $id_user = $this->session->userdata('id_user');
+            $nama_paguyuban = $this->input->post('nama_paguyuban');
+            $deskripsi_paguyuban = $this->input->post('deskripsi_paguyuban');
+            $alamat_paguyuban = $this->input->post('alamat_paguyuban');
+            $telepon_paguyuban = $this->input->post('telepon_paguyuban');
+            $lat_paguyuban = $this->input->post('lat_paguyuban');
+            $lng_paguyuban = $this->input->post('lng_paguyuban');
 
-            if ($submitType == 'Tambah') { // * jika tambah data
+            if ($submitType == 'Simpan') { // * jika simpan data
+                $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
+                $user = $this->User_model->getUser('id_user', $id_user);
+                if ($paguyuban) { // jika user telah memiliki paguyuban maka tidak boleh buat
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $user['username'] . ' telah terdaftar pada paguyuban ' . $paguyuban['nama_paguyuban'] . '</div>');
 
-                if ($_FILES['gambar_penyakit']['error'] != 4) {
-                    $gambar_penyakit = $this->upload_image('gambar_penyakit', './assets/img/penyakit/');
+                    redirect('paguyuban/paguyuban');
+                }
+
+                if ($_FILES['foto_paguyuban']['error'] != 4) {
+                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
                 } else {
-                    $gambar_penyakit = 'no-image.jpg';
+                    $foto_paguyuban = 'no-image.jpg';
                 }
 
-                // * data penyakit yang akan diinput
-                $data_penyakit = array(
-                    'nama_penyakit' => $nama_penyakit,
-                    'deskripsi_penyakit' => $deskripsi_penyakit,
-                    'saran_penyakit' => $saran_penyakit,
-                    'gambar_penyakit' => $gambar_penyakit,
+                // * data paguyuban yang akan diinput
+                $data = array(
+                    'id_user' => $id_user,
+                    'nama_paguyuban' => $nama_paguyuban,
+                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
+                    'alamat_paguyuban' => $alamat_paguyuban,
+                    'foto_paguyuban' => $foto_paguyuban,
+                    'telepon_paguyuban' => $telepon_paguyuban,
+                    'lat_paguyuban' => $lat_paguyuban,
+                    'lng_paguyuban' => $lng_paguyuban,
+                    'paguyuban_created' => time(),
                 );
 
-                if ($this->Penyakit_model->insertPenyakit($data_penyakit)) { // * jika berhasil input penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan penyakit</div>');
+                if ($this->Paguyuban_model->insertPaguyuban($data)) { // * jika berhasil input
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan paguyuban</div>');
 
-                    redirect('pakar/penyakit');
-                } else { // ! jika gagal input penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan penyakit</div>');
+                    redirect('paguyuban/paguyuban');
+                } else { // ! jika gagal input
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan paguyuban</div>');
 
-                    redirect('pakar/penyakit');
+                    redirect('paguyuban/paguyuban');
                 }
-            } else { // * jika edit data
-                $id_penyakit = $this->input->post('id_penyakit');
-                $penyakit = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
+            } else { // * jika edit data                
+                $id_paguyuban = $this->input->post('id_paguyuban');
+                $owner = $this->input->post('owner');
+                $paguyuban = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
 
-                if ($_FILES['gambar_penyakit']['error'] != 4) {
-                    $gambar_penyakit = $this->upload_image('gambar_penyakit', './assets/img/penyakit/');
+                if ($owner != $id_user) { // jika owner dirubah
+                    $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
+                    $user = $this->User_model->getUser('id_user', $id_user);
+                    if ($paguyuban) { // jika user telah memiliki paguyuban maka tidak boleh buat
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $user['username'] . ' telah terdaftar pada paguyuban ' . $paguyuban['nama_paguyuban'] . '</div>');
+
+                        redirect('paguyuban/paguyuban');
+                    }
+                }
+
+                if ($_FILES['foto_paguyuban']['error'] != 4) {
+                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
                 } else {
-                    $gambar_penyakit = $penyakit['gambar_penyakit'];
+                    $foto_paguyuban = $paguyuban['foto_paguyuban'];
                 }
 
-                $data_update_penyakit = array(
-                    'nama_penyakit' => $nama_penyakit,
-                    'deskripsi_penyakit' => $deskripsi_penyakit,
-                    'saran_penyakit' => $saran_penyakit,
-                    'gambar_penyakit' => $gambar_penyakit,
+                $data = array(
+                    'id_user' => $id_user,
+                    'nama_paguyuban' => $nama_paguyuban,
+                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
+                    'alamat_paguyuban' => $alamat_paguyuban,
+                    'foto_paguyuban' => $foto_paguyuban,
+                    'telepon_paguyuban' => $telepon_paguyuban,
+                    'lat_paguyuban' => $lat_paguyuban,
+                    'lng_paguyuban' => $lng_paguyuban,
+                    'paguyuban_updated' => time(),
                 );
 
-                if ($this->Penyakit_model->updatePenyakit('id_penyakit', $data_update_penyakit, $id_penyakit)) { // * jika berhasil update penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah penyakit</div>');
+                if ($this->Paguyuban_model->updatePaguyuban('id_paguyuban', $data, $id_paguyuban)) { // * jika berhasil update
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah paguyuban</div>');
 
-                    redirect('pakar/penyakit');
-                } else { // ! jika gagal update penyakit
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah penyakit</div>');
+                    redirect('paguyuban/paguyuban');
+                } else { // ! jika gagal update paguyuban
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah paguyuban</div>');
 
-                    redirect('pakar/penyakit');
+                    redirect('paguyuban/paguyuban');
                 }
             }
         }
     }
 
-    // * untuk menampilkan artikel dari penyakit
-    public function artikelPenyakit($id_penyakit)
+    public function editPaguyuban($id_paguyuban)
     {
-        $data['title'] = "Artikel Penyakit";
-        $data['menu'] = "penyakit_pakar";
-        $data['sub_menu'] = null;
+        $data['title'] = "Paguyuban";
+        $data['menu'] = "paguyuban_paguyuban";
+        $data['sub_menu'] = "paguyuban_edit";
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
 
-        // validation forms                
-        $this->form_validation->set_rules('penyakit_artikel', 'Penyakit Artikel', 'required|trim');
-        $this->form_validation->set_rules('penyakit_saran_artikel', 'Detail Saran', 'required|trim');
-
-        if ($this->form_validation->run() == FALSE) { // * jika belum input form
-            $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('pakar/artikel_penyakit_pakar_view');
-            $this->load->view('template/panel/control_view');
-            $this->load->view('template/panel/footer_view');
-        } else { // * jika sudah input                        
-            $penyakit_artikel = $this->input->post('penyakit_artikel');
-            $penyakit_saran_artikel = $this->input->post('penyakit_saran_artikel');
-
-            $data_update_penyakit = array(
-                'penyakit_artikel' => $penyakit_artikel,
-                'penyakit_saran_artikel' => $penyakit_saran_artikel,
-            );
-
-            if ($this->Penyakit_model->updatePenyakit('id_penyakit', $data_update_penyakit, $id_penyakit)) { // * jika berhasil update artikel penyakit
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah artikel penyakit</div>');
-
-                redirect('pakar/penyakit');
-            } else { // ! jika gagal update artikel penyakit
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah artikel penyakit</div>');
-
-                redirect('pakar/penyakit');
-            }
-        }
-    }
-
-    // * untuk menampilkan detail penyakit
-    public function editPenyakit($id_penyakit)
-    {
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('id_penyakit', $id_penyakit);
-
-        $this->load->view('admin/ajax/edit_penyakit_form', $data);
-    }
-
-    // * untuk menghapus penyakit
-    public function deletePenyakit($id_penyakit)
-    {
-        if ($this->Penyakit_model->deletePenyakit('id_penyakit', $id_penyakit)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus penyakit</div>');
-
-            redirect('pakar/penyakit');
-        } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus penyakit</div>');
-
-            redirect('pakar/penyakit');
-        }
-    }
-    // * halaman pengguna ===================================================================================
-
-    // * halaman gejala ===================================================================================
-    public function gejala()
-    {
-        $data['title'] = "Gejala";
-        $data['menu'] = "gejala_pakar";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
-
-        // validation forms                
-        $this->form_validation->set_rules('nama_gejala', 'Gejala', 'required|trim');
+        // validation forms                        
+        $this->form_validation->set_rules('nama_paguyuban', 'Nama Paguyuban', 'required|trim');
+        $this->form_validation->set_rules('deskripsi_paguyuban', 'Deskripsi', 'required|trim');
+        $this->form_validation->set_rules('alamat_paguyuban', 'Alamat', 'required|trim');
+        $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
+        $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('pakar/gejala_pakar_view');
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/edit_paguyuban_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input
             $submitType = $this->input->post('submit-type');
-            $nama_gejala = $this->input->post('nama_gejala');
 
-            if ($submitType == 'Tambah') { // * jika tambah data
+            $id_user = $this->session->userdata('id_user');
+            $nama_paguyuban = $this->input->post('nama_paguyuban');
+            $deskripsi_paguyuban = $this->input->post('deskripsi_paguyuban');
+            $alamat_paguyuban = $this->input->post('alamat_paguyuban');
+            $telepon_paguyuban = $this->input->post('telepon_paguyuban');
+            $lat_paguyuban = $this->input->post('lat_paguyuban');
+            $lng_paguyuban = $this->input->post('lng_paguyuban');
 
-                // * data gejala yang akan diinput
-                $data_gejala = array(
-                    'nama_gejala' => $nama_gejala,
-                );
+            if ($submitType == 'Simpan') { // * jika simpan data
+                $paguyuban = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
 
-                if ($this->Gejala_model->insertGejala($data_gejala)) { // * jika berhasil input gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan gejala</div>');
-
-                    redirect('pakar/gejala');
-                } else { // ! jika gagal input gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan gejala</div>');
-
-                    redirect('pakar/gejala');
+                if ($_FILES['foto_paguyuban']['error'] != 4) {
+                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
+                } else {
+                    $foto_paguyuban = $paguyuban['foto_paguyuban'];
                 }
-            } else { // * jika edit data
-                $id_gejala = $this->input->post('id_gejala');
 
-                $data_update_gejala = array(
-                    'nama_gejala' => $nama_gejala,
+                // * data paguyuban yang akan diinput
+                $data = array(
+                    'id_user' => $id_user,
+                    'nama_paguyuban' => $nama_paguyuban,
+                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
+                    'alamat_paguyuban' => $alamat_paguyuban,
+                    'foto_paguyuban' => $foto_paguyuban,
+                    'telepon_paguyuban' => $telepon_paguyuban,
+                    'lat_paguyuban' => $lat_paguyuban,
+                    'lng_paguyuban' => $lng_paguyuban,
+                    'paguyuban_updated' => time(),
                 );
 
-                if ($this->Gejala_model->updateGejala('id_gejala', $data_update_gejala, $id_gejala)) { // * jika berhasil update gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah gejala</div>');
+                if ($this->Paguyuban_model->updatePaguyuban('id_paguyuban', $data, $id_paguyuban)) { // * jika berhasil update
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah paguyuban</div>');
 
-                    redirect('pakar/gejala');
-                } else { // ! jika gagal update gejala
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah gejala</div>');
+                    redirect('paguyuban/paguyuban');
+                } else { // ! jika gagal input
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah paguyuban</div>');
 
-                    redirect('pakar/gejala');
-                }
-            }
-        }
-    }
-
-    // * untuk menampilkan detail gejala
-    public function editGejala($id_gejala)
-    {
-        $data['gejala'] = $this->Gejala_model->getGejala('id_gejala', $id_gejala);
-
-        $this->load->view('admin/ajax/edit_gejala_form', $data);
-    }
-
-    // * untuk menghapus gejala
-    public function deleteGejala($id_gejala)
-    {
-        if ($this->Gejala_model->deleteGejala('id_gejala', $id_gejala)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus gejala</div>');
-
-            redirect('pakar/gejala');
-        } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus gejala</div>');
-
-            redirect('pakar/gejala');
-        }
-    }
-    // * halaman gejala ===================================================================================
-
-    // * halaman pengetahuan ===================================================================================
-    public function pengetahuan()
-    {
-        $data['title'] = "Pengetahuan";
-        $data['menu'] = "pengetahuan_pakar";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-
-        $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('all');
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
-
-        // validation forms                
-        $this->form_validation->set_rules('id_penyakit', 'Penyakit', 'required|trim');
-        $this->form_validation->set_rules('id_gejala', 'Gejala', 'required|trim');
-        $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');
-
-        if ($this->form_validation->run() == FALSE) { // * jika belum input form
-            $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('pakar/pengetahuan_pakar_view');
-            $this->load->view('template/panel/control_view');
-            $this->load->view('template/panel/footer_view');
-        } else { // * jika sudah input
-            $submitType = $this->input->post('submit-type');
-            $id_penyakit = $this->input->post('id_penyakit');
-            $id_gejala = $this->input->post('id_gejala');
-            $mb = $this->input->post('cf_pakar');
-
-            if ($submitType == 'Tambah') { // * jika tambah data
-
-                // * data gejala yang akan diinput
-                $data_pengetahuan = array(
-                    'id_penyakit' => $id_penyakit,
-                    'id_gejala' => $id_gejala,
-                    'cf_pakar' => $mb,
-                );
-
-                if ($this->Pengetahuan_model->insertPengetahuan($data_pengetahuan)) { // * jika berhasil input pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan pengetahuan</div>');
-
-                    redirect('pakar/pengetahuan');
-                } else { // ! jika gagal input pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan pengetahuan</div>');
-
-                    redirect('pakar/pengetahuan');
-                }
-            } else { // * jika edit data
-                $id_basis_pengetahuan = $this->input->post('id_basis_pengetahuan');
-
-                $data_update_pengetahuan = array(
-                    'id_penyakit' => $id_penyakit,
-                    'id_gejala' => $id_gejala,
-                    'cf_pakar' => $mb,
-                );
-
-                if ($this->Pengetahuan_model->updatePengetahuan('id_basis_pengetahuan', $data_update_pengetahuan, $id_basis_pengetahuan)) { // * jika berhasil update pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah pengetahuan</div>');
-
-                    redirect('pakar/pengetahuan');
-                } else { // ! jika gagal update pengetahuan
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah pengetahuan</div>');
-
-                    redirect('pakar/pengetahuan');
+                    redirect('paguyuban/paguyuban');
                 }
             }
         }
     }
 
-    // * untuk menampilkan detail pengetahuan
-    public function editPengetahuan($id_basis_pengetahuan)
+    // * untuk menghapus paguyuban
+    public function deletePaguyuban($id_paguyuban)
     {
-        $data['pengetahuan'] = $this->Pengetahuan_model->getPengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan);
-        $data['penyakit'] = $this->Penyakit_model->getPenyakit('all');
-        $data['gejala'] = $this->Gejala_model->getGejala('all');
+        if ($this->Paguyuban_model->deletePaguyuban('id_paguyuban', $id_paguyuban)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus paguyuban</div>');
 
-        $this->load->view('admin/ajax/edit_pengetahuan_form', $data);
-    }
-
-    // * untuk menghapus pengetahuan
-    public function deletePengetahuan($id_basis_pengetahuan)
-    {
-        if ($this->Pengetahuan_model->deletePengetahuan('id_basis_pengetahuan', $id_basis_pengetahuan)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus pengetahuan</div>');
-
-            redirect('pakar/pengetahuan');
+            redirect('paguyuban/paguyuban');
         } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus pengetahuan</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus paguyuban</div>');
 
-            redirect('pakar/pengetahuan');
+            redirect('paguyuban/paguyuban');
         }
     }
-    // * halaman pengetahuan ===================================================================================
 
-    // * halaman hasil diagnosa
-    public function hasildiagnosa()
+    // * halaman paguyuban ===================================================================================
+
+    // * halaman settings ===================================================================================
+    public function settings()
     {
-        $data['title'] = "Hasil Diagnosa";
-        $data['menu'] = "hasildiagnosa";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['hasil'] = $this->Hasil_model->getHasil('all');
-
-        $this->load->view('template/panel/header_view', $data);
-        $this->load->view('template/panel/sidebar_pakar_view');
-        $this->load->view('pakar/hasil_diagnosa_pakar_view');
-        $this->load->view('template/panel/control_view');
-        $this->load->view('template/panel/footer_view');
-    }
-
-    // * halaman kondisi ===================================================================================
-    public function kondisi()
-    {
-        $data['title'] = "Kondisi";
-        $data['menu'] = "kondisi_pakar";
+        $data['title'] = "Settings";
+        $data['menu'] = "settings";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-        $data['kondisi'] = $this->Kondisi_model->getKondisi('all');
-
-        // validation forms                
-        $this->form_validation->set_rules('nama_kondisi', 'Nama Kondisi', 'required|trim');
-        $this->form_validation->set_rules('cf_kondisi', 'CF KONDISI', 'required|trim|decimal');
+        if ($this->input->post('update_action') == 'profile') {
+            // config edit profil
+            $this->form_validation->set_rules('username', 'Username', 'required|trim|max_length[50]');
+            $this->form_validation->set_rules('telepon_user', 'Telepon', 'required|trim|max_length[16]|numeric');
+            $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[50]');
+        } else {
+            $this->form_validation->set_rules('password_lama', 'Password', 'required|trim|max_length[20]|min_length[6]');
+            $this->form_validation->set_rules('password_baru', 'Password', 'required|trim|max_length[20]|min_length[6]');
+            $this->form_validation->set_rules('password_baru_ver', 'Password verifikasi', 'required|trim|max_length[20]|min_length[6]|matches[password_baru]');
+        }
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('pakar/kondisi_pakar_view');
-            $this->load->view('template/panel/control_view');
-            $this->load->view('template/panel/footer_view');
-        } else { // * jika sudah input
-            $submitType = $this->input->post('submit-type');
-            $nama_kondisi = $this->input->post('nama_kondisi');
-            $bobot = $this->input->post('cf_kondisi');
-
-            if ($submitType == 'Tambah') { // * jika tambah data
-
-                // * data kondisi yang akan diinput
-                $data_kondisi = array(
-                    'id_user' => $this->session->userdata('id_user'),
-                    'nama_kondisi' => $nama_kondisi,
-                    'cf_kondisi' => $bobot,
-                );
-
-                if ($this->Kondisi_model->insertKondisi($data_kondisi)) { // * jika berhasil input kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menambahkan kondisi</div>');
-
-                    redirect('pakar/kondisi');
-                } else { // ! jika gagal input kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan kondisi</div>');
-
-                    redirect('pakar/kondisi');
-                }
-            } else { // * jika edit data
-                $id_kondisi = $this->input->post('id_kondisi');
-
-                $data_update_kondisi = array(
-                    'nama_kondisi' => $nama_kondisi,
-                    'cf_kondisi' => $bobot,
-                );
-
-                if ($this->Kondisi_model->updateKondisi('id_kondisi', $data_update_kondisi, $id_kondisi)) { // * jika berhasil update kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah kondisi</div>');
-
-                    redirect('pakar/kondisi');
-                } else { // ! jika gagal update kondisi
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah kondisi</div>');
-
-                    redirect('pakar/kondisi');
-                }
-            }
-        }
-    }
-
-    // * untuk menampilkan detail kondisi
-    public function editKondisi($id_kondisi)
-    {
-        $data['kondisi'] = $this->Kondisi_model->getKondisi('id_kondisi', $id_kondisi);
-
-        $this->load->view('admin/ajax/edit_kondisi_form', $data);
-    }
-
-    // * untuk menghapus kondisi
-    public function deleteKondisi($id_kondisi)
-    {
-        if ($this->Kondisi_model->deleteKondisi('id_kondisi', $id_kondisi)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus kondisi</div>');
-
-            redirect('pakar/kondisi');
-        } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus kondisi</div>');
-
-            redirect('pakar/kondisi');
-        }
-    }
-    // * halaman kondisi ===================================================================================
-
-    // * halaman password ===================================================================================
-    public function password()
-    {
-        $data['title'] = "Ubah Password";
-        $data['menu'] = "password";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-
-        // validation forms                
-        $this->form_validation->set_rules('password_lama', 'Password Lama', 'required|trim');
-        $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|trim');
-        $this->form_validation->set_rules('password_baru_konfirmasi', 'Password Konfirmasi', 'required|trim|matches[password_baru]');
-
-        if ($this->form_validation->run() == FALSE) { // * jika belum input form
-            $this->load->view('template/panel/header_view', $data);
-            $this->load->view('template/panel/sidebar_pakar_view');
-            $this->load->view('admin/password_admin_view');
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/settings_paguyuban_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input            
-            $password_lama = $this->input->post('password_lama');
-            $password_baru = $this->input->post('password_baru');
+            $user = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-            // * jika password lama salah
-            if (!password_verify($password_lama, $data['user']['password'])) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password lama tidak sesuai</div>');
+            // cek apakah ada aksi rubah profil
+            if ($this->input->post('update_action') == 'profile') { // ? edit profile
+                // update thumbnail atatu tidak
+                if ($_FILES['foto_user']['error'] != 4) {
+                    $foto_user = $this->upload_image('foto_user', './assets/img/');
+                } else {
+                    $foto_user = $user['foto_user'];
+                }
 
-                redirect('pakar/password');
-            }
+                $data = [
+                    'username' => htmlspecialchars($this->input->post('username', true)),
+                    'email' => strtoupper(htmlspecialchars($this->input->post('email', true))),
+                    'telepon_user' => htmlspecialchars($this->input->post('telepon_user', true)),
+                    'foto_user' => $foto_user,
+                    'user_updated' => time(),
+                ];
 
-            $data_password_update = array(
-                'password' => password_hash($password_baru, PASSWORD_DEFAULT),
-            );
+                if ($this->User_model->updateUser('id_user', $data, $this->session->userdata('id_user'))) { // * jika berhasil rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Profile berhasil dirubah</div>');
 
-            if ($this->User_model->updateUser('id_user', $data_password_update, $this->session->userdata('id_user'))) { // * jika berhasil rubah password
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password berhasil dirubah</div>');
+                    redirect('paguyuban/settings');
+                } else { // ! jika gagal rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Profile gagal dirubah</div>');
 
-                redirect('pakar/password');
-            } else { // ! jika gagal rubah password
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password gagal dirubah</div>');
+                    redirect('paguyuban/settings');
+                }
+            } else { // ? edit password
+                $password_lama = $this->input->post('password_lama');
+                $password_baru = $this->input->post('password_baru');
 
-                redirect('pakar/password');
+                // * jika password lama salah
+                if (!password_verify($password_lama, $user['password'])) {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password lama tidak sesuai</div>');
+
+                    redirect('paguyuban/settings');
+                }
+
+                $data = array(
+                    'password' => password_hash($password_baru, PASSWORD_DEFAULT),
+                );
+
+                if ($this->User_model->updateUser('id_user', $data, $this->session->userdata('id_user'))) { // * jika berhasil rubah password
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password berhasil dirubah</div>');
+
+                    redirect('paguyuban/settings');
+                } else { // ! jika gagal rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password gagal dirubah</div>');
+
+                    redirect('paguyuban/settings');
+                }
             }
         }
     }
-    // * halaman password ===================================================================================
-
-    // * halaman tentang ===================================================================================
-    public function tentang()
-    {
-        $data['title'] = "Tentang";
-        $data['menu'] = "tentang";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-
-        $this->load->view('template/panel/header_view', $data);
-        $this->load->view('template/panel/sidebar_pakar_view');
-        $this->load->view('admin/tentang_admin_view');
-        $this->load->view('template/panel/control_view');
-        $this->load->view('template/panel/footer_view');
-    }
-    // * halaman password ===================================================================================
+    // * halaman setting ===================================================================================
 
     //  *fungsi untuk upload image
     private function upload_image($name, $address)

@@ -2,7 +2,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#l" class="brand-link text-center">
-      <!-- <img src="<?= base_url('assets/pakarlte/'); ?>dist/img/pakarLTELogo.png" alt="STEP-A Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+      <!-- <img src="<?= base_url('assets/paguyubanlte/'); ?>dist/img/paguyubanLTELogo.png" alt="STEP-A Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
       <span class="brand-text font-weight-bold">SIG PAGUYUBAN REOG</span>
     </a>
 
@@ -11,7 +11,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="<?= base_url('assets/img/user-no-image.jpg') ?>" class="img-circle elevation-2" alt="User Image">
+          <img src="<?= base_url('assets/img/') . $user['foto_user'] ?>" class="img-circle elevation-2" alt="User Image" style="height: 33px; width: 33px; object-fit: cover">
         </div>
         <div class="info">
           <a href="#" class="d-block"><?= $user['username']; ?></a>
@@ -24,7 +24,7 @@
                with font-awesome or any other icon font library -->
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar'); ?>" class="nav-link <?= $menu == 'beranda_paguyuban' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban'); ?>" class="nav-link <?= $menu == 'beranda_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Beranda
@@ -33,7 +33,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/paguyuban'); ?>" class="nav-link <?= $menu == 'paguyuban' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/paguyuban'); ?>" class="nav-link <?= $menu == 'paguyuban_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-house-user"></i>
               <p>
                 Paguyuban
@@ -42,7 +42,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/jasa'); ?>" class="nav-link <?= $menu == 'jasa' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/jasa'); ?>" class="nav-link <?= $menu == 'jasa' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-people-arrows"></i>
               <p>
                 Jasa
@@ -51,7 +51,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/reservasi'); ?>" class="nav-link <?= $menu == 'reservasi' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/reservasi'); ?>" class="nav-link <?= $menu == 'reservasi' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
                 Reservasi
@@ -60,7 +60,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/transaksi'); ?>" class="nav-link <?= $menu == 'transaksi' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/transaksi'); ?>" class="nav-link <?= $menu == 'transaksi' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-wallet"></i>
               <p>
                 Transaksi
@@ -69,7 +69,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/settings'); ?>" class="nav-link <?= $menu == 'settings' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/settings'); ?>" class="nav-link <?= $menu == 'settings' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings

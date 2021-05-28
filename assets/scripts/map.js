@@ -1,4 +1,6 @@
 let map;
+let markers = L.layerGroup();
+
 const options = {
 	jember: {
 		lat: -8.168885,
@@ -99,7 +101,42 @@ function onMapClickMove(e) {
 }
 
 function addMarker({lat, lng, name, alamat, idPaguyuban}) {
-	let marker = L.marker([lat, lng]).addTo(map);
-	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/admin/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
+	let marker = L.marker([lat, lng]);
+	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
+	
 	marker.on('click', onMapClickMove);
+	markers.addLayer(marker);
+	markers.addTo(map);
+}
+
+function addMarkerToMapForm(e) {
+	clearAllMarkers();
+
+	let marker = L.marker([e.latlng.lat, e.latlng.lng]);
+	markers.addLayer(marker);
+	markers.addTo(map);
+
+
+	$('#latitudeAdd').val(e.latlng.lat);
+	$('#longitudeAdd').val(e.latlng.lng);
+}
+
+function handleClickToAddMarker() {
+	map.on('click', addMarkerToMapForm);
+}
+
+function handleClickToEditMarker({lat, lng, name, alamat, idPaguyuban}) {
+	let marker = L.marker([lat, lng]);
+	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
+
+	markers.addLayer(marker);
+	markers.addTo(map);
+
+	map.panTo(marker.getLatLng());
+	
+	map.on('click', addMarkerToMapForm);
+}
+
+function clearAllMarkers() {
+	markers.clearLayers();
 }

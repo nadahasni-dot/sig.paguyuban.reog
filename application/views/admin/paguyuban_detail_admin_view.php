@@ -26,7 +26,7 @@
                     <!-- small card -->
                     <div class="small-box bg-primary">
                         <div class="inner">
-                            <h3>0</h3>
+                            <h3><?= $count_jasa ?></h3>
 
                             <p>Total Jasa</p>
                         </div>
@@ -40,7 +40,7 @@
                     <!-- small card -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>0</h3>
+                            <h3><?= $count_reservasi ?></h3>
 
                             <p>Total Reservasi</p>
                         </div>
@@ -54,7 +54,7 @@
                     <!-- small card -->
                     <div class="small-box bg-pink">
                         <div class="inner">
-                            <h3>0</h3>
+                            <h3><?= $count_transaksi ?></h3>
 
                             <p>Total Transaksi</p>
                         </div>

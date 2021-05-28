@@ -55,7 +55,7 @@
         addMarker({
           lat: <?= $row['lat_paguyuban'] ?>,
           lng: <?= $row['lng_paguyuban'] ?>,
-          id: <?= $row['id_paguyuban'] ?>,
+          idPaguyuban: <?= $row['id_paguyuban'] ?>,
           name: '<?= $row['nama_paguyuban'] ?>',
           alamat: '<?= $row['alamat_paguyuban'] ?>'
         });
@@ -75,7 +75,7 @@
         addMarker({
           lat: <?= $row['lat_paguyuban'] ?>,
           lng: <?= $row['lng_paguyuban'] ?>,
-          id: <?= $row['id_paguyuban'] ?>,
+          idPaguyuban: <?= $row['id_paguyuban'] ?>,
           name: '<?= $row['nama_paguyuban'] ?>',
           alamat: '<?= $row['alamat_paguyuban'] ?>'
         });
@@ -99,6 +99,38 @@
       );
     </script>
   <?php endif; ?>
+
+  <?php if ($sub_menu == 'paguyuban_add') : ?>
+    <script src="<?= base_url('assets/scripts/paguyuban.js') ?>"></script>
+    <script>
+      <?php if ($paguyuban) : ?>
+        initMapSingleMarker(
+          <?= $paguyuban['lat_paguyuban'] ?>,
+          <?= $paguyuban['lng_paguyuban'] ?>,
+          '<?= $paguyuban['nama_paguyuban'] ?>',
+          '<?= $paguyuban['alamat_paguyuban'] ?>',
+        );
+      <?php else : ?>
+        initMap();
+        handleClickToAddMarker();
+      <?php endif; ?>
+    </script>
+  <?php endif; ?>
+
+  <?php if ($sub_menu == 'paguyuban_edit') : ?>
+    <script src="<?= base_url('assets/scripts/paguyuban.js') ?>"></script>
+    <script>
+      initMap();
+      handleClickToEditMarker({
+        lat: <?= $paguyuban['lat_paguyuban'] ?>,
+        lng: <?= $paguyuban['lng_paguyuban'] ?>,
+        idPaguyuban: <?= $paguyuban['id_paguyuban'] ?>,
+        name: '<?= $paguyuban['nama_paguyuban'] ?>',
+        alamat: '<?= $paguyuban['alamat_paguyuban'] ?>'
+      });
+    </script>
+  <?php endif; ?>
+
   <?php if ($menu == 'penyakit_pakar') : ?>
     <script src="<?= base_url('assets/scripts/penyakit.pakar.js') ?>"></script>
   <?php endif; ?>

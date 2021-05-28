@@ -309,6 +309,9 @@ class Admin extends CI_Controller
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
+        $data['count_jasa'] = $this->Jasa_model->countJasa('all_paguyuban', $id_paguyuban);
+        $data['count_reservasi'] = $this->Reservasi_model->countReservasi('all_paguyuban', $id_paguyuban);
+        $data['count_transaksi'] = $this->Transaksi_model->countTransaksi('confirmed_paguyuban', $id_paguyuban);
 
         $this->load->view('template/panel/header_view', $data);
         $this->load->view('template/panel/sidebar_admin_view');
