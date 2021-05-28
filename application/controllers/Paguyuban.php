@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pakar extends CI_Controller
+class Paguyuban extends CI_Controller
 {
     public function __construct()
     {
@@ -12,34 +12,42 @@ class Pakar extends CI_Controller
         }
 
         $this->load->model('User_model');
-        $this->load->model('Gejala_model');
-        $this->load->model('Kondisi_model');
-        $this->load->model('Pengetahuan_model');
-        $this->load->model('Penyakit_model');
-        $this->load->model('Hasil_model');
+        $this->load->model('Paguyuban_model');
+        $this->load->model('Jasa_model');
+        $this->load->model('Reservasi_model');
+        $this->load->model('Transaksi_model');
     }
 
     // * halaman beranda
     public function index()
     {
         $data['title'] = "Beranda";
-        $data['menu'] = "beranda";
+        $data['menu'] = "beranda_paguyuban";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
+
         // user data
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['count_penyakit'] = $this->Penyakit_model->countPenyakit('all');
-        $data['count_gejala'] = $this->Gejala_model->countGejala('all');
-        $data['count_pengetahuan'] = $this->Pengetahuan_model->countPengetahuan('all');
-        $data['count_pakar'] = $this->User_model->countUser('all');
 
-        $data['hasil_penyakit'] = $this->Hasil_model->getHasil('chart_penyakit');
-        $data['hasil_usia'] = $this->Hasil_model->getHasil('chart_usia');
-        $data['hasil_jenis_kelamin'] = $this->Hasil_model->getHasil('chart_jenis_kelamin');
+        $data['all_paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+
+        if (!$data['paguyuban']) { // jika data paguyuban belum diisi
+            $data['count_jasa'] = 0;
+            $data['count_reservasi'] = 0;
+            $data['count_transaksi'] = 0;
+            $data['count_sum_transaksi'] = array('sum_transaksi' => null);
+        } else {
+            $data['count_jasa'] = $this->Jasa_model->countJasa('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_reservasi'] = $this->Reservasi_model->countReservasi('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_transaksi'] = $this->Transaksi_model->countTransaksi('confirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_sum_transaksi'] = $this->Transaksi_model->countTransaksi('sum_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
+
 
         $this->load->view('template/panel/header_view', $data);
-        $this->load->view('template/panel/sidebar_pakar_view');
-        $this->load->view('admin/home_admin_view');
+        $this->load->view('template/panel/sidebar_paguyuban_view');
+        $this->load->view('paguyuban/home_paguyuban_view');
         $this->load->view('template/panel/control_view');
         $this->load->view('template/panel/footer_view');
     }
@@ -293,7 +301,7 @@ class Pakar extends CI_Controller
         // validation forms                
         $this->form_validation->set_rules('id_penyakit', 'Penyakit', 'required|trim');
         $this->form_validation->set_rules('id_gejala', 'Gejala', 'required|trim');
-        $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');        
+        $this->form_validation->set_rules('cf_pakar', 'CF PAKAR', 'required|trim|decimal');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
@@ -305,7 +313,7 @@ class Pakar extends CI_Controller
             $submitType = $this->input->post('submit-type');
             $id_penyakit = $this->input->post('id_penyakit');
             $id_gejala = $this->input->post('id_gejala');
-            $mb = $this->input->post('cf_pakar');            
+            $mb = $this->input->post('cf_pakar');
 
             if ($submitType == 'Tambah') { // * jika tambah data
 
@@ -313,7 +321,7 @@ class Pakar extends CI_Controller
                 $data_pengetahuan = array(
                     'id_penyakit' => $id_penyakit,
                     'id_gejala' => $id_gejala,
-                    'cf_pakar' => $mb,                    
+                    'cf_pakar' => $mb,
                 );
 
                 if ($this->Pengetahuan_model->insertPengetahuan($data_pengetahuan)) { // * jika berhasil input pengetahuan
@@ -331,7 +339,7 @@ class Pakar extends CI_Controller
                 $data_update_pengetahuan = array(
                     'id_penyakit' => $id_penyakit,
                     'id_gejala' => $id_gejala,
-                    'cf_pakar' => $mb,                    
+                    'cf_pakar' => $mb,
                 );
 
                 if ($this->Pengetahuan_model->updatePengetahuan('id_basis_pengetahuan', $data_update_pengetahuan, $id_basis_pengetahuan)) { // * jika berhasil update pengetahuan
@@ -381,7 +389,7 @@ class Pakar extends CI_Controller
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['hasil'] = $this->Hasil_model->getHasil('all');        
+        $data['hasil'] = $this->Hasil_model->getHasil('all');
 
         $this->load->view('template/panel/header_view', $data);
         $this->load->view('template/panel/sidebar_pakar_view');

@@ -50,5 +50,10 @@ class Reservasi_model extends CI_Model
         if ($tipe == 'all') {
             return $this->db->count_all_results('tb_reservasi');
         }
+
+        if ($tipe == 'all_paguyuban') {
+            $this->db->where('id_paguyuban', $param);
+            return $this->db->count_all_results('tb_reservasi');
+        }
     }
 }

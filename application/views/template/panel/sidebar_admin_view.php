@@ -75,7 +75,7 @@
                 Transaksi
               </p>
             </a>
-          </li>          
+          </li>
 
           <li class="nav-item">
             <a href="<?= base_url('admin/settings'); ?>" class="nav-link <?= $menu == 'settings' ? 'active' : '' ?>">
@@ -84,7 +84,7 @@
                 Settings
               </p>
             </a>
-          </li>          
+          </li>
 
           <li class="nav-item">
             <a href="<?= base_url('logout'); ?>" class="nav-link">

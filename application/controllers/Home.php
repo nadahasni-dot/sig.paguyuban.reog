@@ -20,7 +20,7 @@ class Home extends CI_Controller {
 		$this->load->view('template/landing/landing_footer_view');
 	}
 
-	public function paguyuban()
+	public function daftarPaguyuban()
 	{
 		$data['title'] = 'SIG PAGUYUBAN REOG | PAGUYUBAN';
 

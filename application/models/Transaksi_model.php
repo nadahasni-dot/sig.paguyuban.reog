@@ -48,5 +48,21 @@ class Transaksi_model extends CI_Model
             $this->db->where('status_transaksi', 1);
             return $this->db->count_all_results('tb_transaksi');
         }
+
+        if ($tipe == 'confirmed_paguyuban') {
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            $this->db->where('tb_reservasi.id_paguyuban', $param);
+            $this->db->where('tb_transaksi.status_transaksi', 1);
+            return $this->db->count_all_results('tb_transaksi');
+        }
+
+        if ($tipe == 'sum_paguyuban') {
+            $this->db->select('SUM(tb_transaksi.nominal_transaksi) AS sum_transaksi');
+            $this->db->from('tb_transaksi');
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            $this->db->where('tb_reservasi.id_paguyuban', $param);
+            $this->db->where('tb_transaksi.status_transaksi', 1);
+            return $this->db->get()->row_array();
+        }
     }
 }

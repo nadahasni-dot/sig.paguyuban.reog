@@ -24,73 +24,55 @@
                with font-awesome or any other icon font library -->
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar'); ?>" class="nav-link <?= $menu == 'beranda' ? 'active' : '' ?>">
+            <a href="<?= base_url('pakar'); ?>" class="nav-link <?= $menu == 'beranda_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Beranda
               </p>
             </a>
-          </li>          
+          </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar/penyakit'); ?>" class="nav-link <?= $menu == 'penyakit_pakar' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-bug"></i>
+            <a href="<?= base_url('admin/paguyuban'); ?>" class="nav-link <?= $menu == 'paguyuban' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-house-user"></i>
               <p>
-                Penyakit
+                Paguyuban
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar/gejala'); ?>" class="nav-link <?= $menu == 'gejala_pakar' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-eye-dropper"></i>
+            <a href="<?= base_url('admin/jasa'); ?>" class="nav-link <?= $menu == 'jasa' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-people-arrows"></i>
               <p>
-                Gejala
+                Jasa
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar/kondisi'); ?>" class="nav-link <?= $menu == 'kondisi_pakar' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-list-ol"></i>
+            <a href="<?= base_url('admin/reservasi'); ?>" class="nav-link <?= $menu == 'reservasi' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-calendar"></i>
               <p>
-                Kondisi
+                Reservasi
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar/pengetahuan'); ?>" class="nav-link <?= $menu == 'pengetahuan_pakar' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-brain"></i>
+            <a href="<?= base_url('admin/transaksi'); ?>" class="nav-link <?= $menu == 'transaksi' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-wallet"></i>
               <p>
-                Pengetahuan
+                Transaksi
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('pakar/hasildiagnosa'); ?>" class="nav-link <?= $menu == 'hasildiagnosa' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-heart"></i>
+            <a href="<?= base_url('admin/settings'); ?>" class="nav-link <?= $menu == 'settings' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-cog"></i>
               <p>
-                Hasil Diagnosa
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="<?= base_url('pakar/password'); ?>" class="nav-link <?= $menu == 'password' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-key"></i>
-              <p>
-                Ubah Password
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="<?= base_url('pakar/tentang'); ?>" class="nav-link <?= $menu == 'tentang' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-info"></i>
-              <p>
-                Tentang
+                Settings
               </p>
             </a>
           </li>

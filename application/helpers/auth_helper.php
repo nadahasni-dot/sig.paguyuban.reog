@@ -17,7 +17,12 @@ if (!function_exists('test_method')) {
 
         // * jika role 2 diarahkan ke pakar
         if($role == 2){
-            redirect('pakar');
+            redirect('paguyuban');
+        }
+
+        // * jika role 2 diarahkan ke pakar
+        if($role == 3){
+            redirect('UMUM');
         }
 
         // * jika role null/kosong/belum login

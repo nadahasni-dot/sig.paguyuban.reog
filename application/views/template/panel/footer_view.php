@@ -62,6 +62,27 @@
       <?php endforeach; ?>
     </script>
   <?php endif; ?>
+
+  <?php if ($menu == 'beranda_paguyuban') : ?>
+    <script>
+      initMap();
+
+      <?php if (!$all_paguyuban) : ?>
+        alert('Tidak ada paguyuban terdaftar');
+      <?php endif; ?>
+
+      <?php foreach ($all_paguyuban as $row) : ?>
+        addMarker({
+          lat: <?= $row['lat_paguyuban'] ?>,
+          lng: <?= $row['lng_paguyuban'] ?>,
+          id: <?= $row['id_paguyuban'] ?>,
+          name: '<?= $row['nama_paguyuban'] ?>',
+          alamat: '<?= $row['alamat_paguyuban'] ?>'
+        });
+      <?php endforeach; ?>
+    </script>
+  <?php endif; ?>
+
   <?php if ($menu == 'pengguna') : ?>
     <script src="<?= base_url('assets/scripts/pengguna.js') ?>"></script>
   <?php endif; ?>

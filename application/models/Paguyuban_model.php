@@ -24,6 +24,10 @@ class Paguyuban_model extends CI_Model
             return $this->db->get_where('tb_paguyuban', ['id_paguyuban' => $param])->row_array();
         }
 
+        if ($tipe == 'id_user') {
+            return $this->db->get_where('tb_paguyuban', ['id_user' => $param])->row_array();
+        }
+
         if ($tipe == 'owner') {
             return $this->db->get_where('tb_paguyuban', ['id_user' => $param])->row_array();
         }

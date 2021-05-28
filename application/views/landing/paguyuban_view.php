@@ -24,7 +24,7 @@
             </div>
             <div class="col-lg-9">
                 <div class="search_wrap">
-                    <form class="search_form" action="<?= base_url('paguyuban') ?>" method="GET">
+                    <form class="search_form" action="<?= base_url('daftarpaguyuban') ?>" method="GET">
                         <div class="input_field mr-1">
                             <input type="text" name="query" placeholder="cari paguyuban disini">
                         </div>

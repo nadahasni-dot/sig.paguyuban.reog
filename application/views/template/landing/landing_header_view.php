@@ -55,7 +55,7 @@
                     <ul id="navigation">
                       <li><a class="active" href="<?= base_url() ?>">home</a></li>
                       <li><a href="<?= base_url('about') ?>">About</a></li>
-                      <li><a class="" href="<?= base_url('paguyuban') ?>">Paguyuban</a></li>
+                      <li><a class="" href="<?= base_url('daftarpaguyuban') ?>">Paguyuban</a></li>
                       <!-- <li><a href="#">pages <i class="ti-angle-down"></i></a>
                         <ul class="submenu">
                           <li><a href="destination_details.html">Destinations details</a></li>
