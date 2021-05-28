@@ -10,9 +10,7 @@ application/logs/*
 
 composer.lock
 
-assets/img/paguyuban/*
-assets/img/jasa/*
-assets/img/transaksi/*
+assets/img/*
 
 user_guide_src/build/*
 user_guide_src/cilexer/build/*

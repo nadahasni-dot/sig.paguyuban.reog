@@ -28,7 +28,7 @@ class Admin extends CI_Controller
         $data['sub_menu_action'] = null;
         // user data
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['count_user'] = $this->User_model->countUser('role', 3);        
+        $data['count_user'] = $this->User_model->countUser('role', 3);
         $data['count_paguyuban'] = $this->Paguyuban_model->countPaguyuban('all');
         $data['count_jasa'] = $this->Jasa_model->countJasa('all');
         $data['count_transaksi'] = $this->Transaksi_model->countTransaksi('confirmed');
@@ -715,72 +715,90 @@ class Admin extends CI_Controller
     }
     // * halaman transaksi ===================================================================================
 
-    // * halaman password ===================================================================================
-    public function password()
+    // * halaman settings ===================================================================================
+    public function settings()
     {
-        $data['title'] = "Ubah Password";
-        $data['menu'] = "password";
+        $data['title'] = "Settings";
+        $data['menu'] = "settings";
         $data['sub_menu'] = null;
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-        // validation forms                
-        $this->form_validation->set_rules('password_lama', 'Password Lama', 'required|trim');
-        $this->form_validation->set_rules('password_baru', 'Password Baru', 'required|trim');
-        $this->form_validation->set_rules('password_baru_konfirmasi', 'Password Konfirmasi', 'required|trim|matches[password_baru]');
+        if ($this->input->post('update_action') == 'profile') {
+            // config edit profil
+            $this->form_validation->set_rules('username', 'Username', 'required|trim|max_length[50]');
+            $this->form_validation->set_rules('telepon_user', 'Telepon', 'required|trim|max_length[16]|numeric');
+            $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[50]');
+        } else {
+            $this->form_validation->set_rules('password_lama', 'Password', 'required|trim|max_length[20]|min_length[6]');
+            $this->form_validation->set_rules('password_baru', 'Password', 'required|trim|max_length[20]|min_length[6]');
+            $this->form_validation->set_rules('password_baru_ver', 'Password verifikasi', 'required|trim|max_length[20]|min_length[6]|matches[password_baru]');
+        }
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
             $this->load->view('template/panel/sidebar_admin_view');
-            $this->load->view('admin/password_admin_view');
+            $this->load->view('admin/settings_admin_view');
             $this->load->view('template/panel/control_view');
             $this->load->view('template/panel/footer_view');
         } else { // * jika sudah input            
-            $password_lama = $this->input->post('password_lama');
-            $password_baru = $this->input->post('password_baru');
+            $user = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
 
-            // * jika password lama salah
-            if (!password_verify($password_lama, $data['user']['password'])) {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password lama tidak sesuai</div>');
+            // cek apakah ada aksi rubah profil
+            if ($this->input->post('update_action') == 'profile') { // ? edit profile
+                // update thumbnail atatu tidak
+                if ($_FILES['foto_user']['error'] != 4) {
+                    $foto_user = $this->upload_image('foto_user', './assets/img/');
+                } else {
+                    $foto_user = $user['foto_user'];
+                }
 
-                redirect('admin/password');
-            }
+                $data = [
+                    'username' => htmlspecialchars($this->input->post('username', true)),
+                    'email' => strtoupper(htmlspecialchars($this->input->post('email', true))),
+                    'telepon_user' => htmlspecialchars($this->input->post('telepon_user', true)),
+                    'foto_user' => $foto_user,
+                    'user_updated' => time(),
+                ];
 
-            $data_password_update = array(
-                'password' => password_hash($password_baru, PASSWORD_DEFAULT),
-            );
+                if ($this->User_model->updateUser('id_user', $data, $this->session->userdata('id_user'))) { // * jika berhasil rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Profile berhasil dirubah</div>');
 
-            if ($this->User_model->updateUser('id_user', $data_password_update, $this->session->userdata('id_user'))) { // * jika berhasil rubah password
-                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password berhasil dirubah</div>');
+                    redirect('admin/settings');
+                } else { // ! jika gagal rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Profile gagal dirubah</div>');
 
-                redirect('admin/password');
-            } else { // ! jika gagal rubah password
-                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password gagal dirubah</div>');
+                    redirect('admin/settings');
+                }
+            } else { // ? edit password
+                $password_lama = $this->input->post('password_lama');
+                $password_baru = $this->input->post('password_baru');
 
-                redirect('admin/password');
+                // * jika password lama salah
+                if (!password_verify($password_lama, $user['password'])) {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password lama tidak sesuai</div>');
+
+                    redirect('admin/settings');
+                }
+
+                $data = array(
+                    'password' => password_hash($password_baru, PASSWORD_DEFAULT),
+                );
+
+                if ($this->User_model->updateUser('id_user', $data, $this->session->userdata('id_user'))) { // * jika berhasil rubah password
+                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password berhasil dirubah</div>');
+
+                    redirect('admin/settings');
+                } else { // ! jika gagal rubah
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Password gagal dirubah</div>');
+
+                    redirect('admin/settings');
+                }
             }
         }
     }
-    // * halaman password ===================================================================================
-
-    // * halaman tentang ===================================================================================
-    public function tentang()
-    {
-        $data['title'] = "Tentang";
-        $data['menu'] = "tentang";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-
-        $this->load->view('template/panel/header_view', $data);
-        $this->load->view('template/panel/sidebar_admin_view');
-        $this->load->view('admin/tentang_admin_view');
-        $this->load->view('template/panel/control_view');
-        $this->load->view('template/panel/footer_view');
-    }
-    // * halaman tentang ===================================================================================
+    // * halaman setting ===================================================================================
 
     //  *fungsi untuk upload image
     private function upload_image($name, $address)

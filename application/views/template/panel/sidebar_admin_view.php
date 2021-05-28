@@ -11,7 +11,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="<?= base_url('assets/img/') . $user['foto_user'] ?>" class="img-circle elevation-2" alt="User Image">
+          <img src="<?= base_url('assets/img/') . $user['foto_user'] ?>" class="img-circle elevation-2" alt="User Image" style="height: 33px; width: 33px; object-fit: cover">
         </div>
         <div class="info">
           <a href="#" class="d-block"><?= $user['username']; ?></a>
@@ -78,7 +78,7 @@
           </li>          
 
           <li class="nav-item">
-            <a href="<?= base_url('admin/password'); ?>" class="nav-link <?= $menu == 'password' ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/settings'); ?>" class="nav-link <?= $menu == 'settings' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
