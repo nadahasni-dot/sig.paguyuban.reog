@@ -16,7 +16,6 @@ class Admin extends CI_Controller
         $this->load->model('Jasa_model');
         $this->load->model('Reservasi_model');
         $this->load->model('Transaksi_model');
-        // $this->load->model('Hasil_model');
     }
 
     // * halaman beranda
@@ -34,9 +33,6 @@ class Admin extends CI_Controller
         $data['count_transaksi'] = $this->Transaksi_model->countTransaksi('confirmed');
 
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
-        // $data['hasil_paguyuban'] = $this->Hasil_model->getHasil('chart_paguyuban');
-        // $data['hasil_usia'] = $this->Hasil_model->getHasil('chart_usia');
-        // $data['hasil_jenis_kelamin'] = $this->Hasil_model->getHasil('chart_jenis_kelamin');
 
         $this->load->view('template/panel/header_view', $data);
         $this->load->view('template/panel/sidebar_admin_view');
@@ -568,38 +564,6 @@ class Admin extends CI_Controller
         }
     }
     // * halaman reservasi ===================================================================================
-
-    // * halaman hasil diagnosa
-    public function hasildiagnosa()
-    {
-        $data['title'] = "Hasil Diagnosa";
-        $data['menu'] = "hasildiagnosa";
-        $data['sub_menu'] = null;
-        $data['sub_menu_action'] = null;
-        // user data        
-        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
-        $data['hasil'] = $this->Hasil_model->getHasil('all');
-
-        $this->load->view('template/panel/header_view', $data);
-        $this->load->view('template/panel/sidebar_admin_view');
-        $this->load->view('admin/hasil_diagnosa_admin_view');
-        $this->load->view('template/panel/control_view');
-        $this->load->view('template/panel/footer_view');
-    }
-
-    // * untuk menghapus hasil
-    public function deleteHasil($id_hasil)
-    {
-        if ($this->Hasil_model->deleteHasil('id_hasil', $id_hasil)) { // * jika berhasil menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus hasil diagnosa</div>');
-
-            redirect('admin/hasildiagnosa');
-        } else { // ! jika gagal menghapus
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus hasil diagnosa</div>');
-
-            redirect('admin/hasildiagnosa');
-        }
-    }
 
     // * halaman transaksi ===================================================================================
     public function transaksi()
