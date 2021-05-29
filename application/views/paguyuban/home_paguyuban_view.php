@@ -59,7 +59,7 @@
                             <!-- small card -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3><?= $count_sum_transaksi['sum_transaksi'] == null ? '0' : $count_sum_transaksi['sum_transaksi'] ?></h3>
+                                    <h3><?= $count_sum_transaksi['sum_transaksi'] == null ? '0' : number_format($count_sum_transaksi['sum_transaksi']) ?></h3>
 
                                     <p>Total Nilai Transaksi</p>
                                 </div>
