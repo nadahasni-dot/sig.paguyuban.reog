@@ -6,3 +6,5 @@ var EDIT_PAGUYUBAN = `${BASE_URL}/admin/editpaguyuban/`;
 var EDIT_RESERVASI = `${BASE_URL}/admin/editreservasi/`;
 
 var EDIT_JASA_PAGUYUBAN = `${BASE_URL}/paguyuban/editjasa/`;
+var EDIT_RESERVASI_PAGUYUBAN = `${BASE_URL}/paguyuban/editreservasi/`;
+var EDIT_TRANSAKSI_PAGUYUBAN = `${BASE_URL}/paguyuban/edittransaksi/`;

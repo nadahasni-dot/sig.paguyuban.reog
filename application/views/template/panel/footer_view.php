@@ -37,6 +37,9 @@
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
   <script src="<?= base_url('assets/adminlte/'); ?>plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+  <!-- fullCalendar 2.2.5 -->
+  <script src="<?= base_url('assets/adminlte/'); ?>plugins/moment/moment.min.js"></script>
+  <script src="<?= base_url('assets/adminlte/'); ?>plugins/fullcalendar/main.js"></script>
   <!-- Make sure you put this AFTER Leaflet's CSS -->
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
@@ -129,7 +132,7 @@
         alamat: '<?= $paguyuban['alamat_paguyuban'] ?>'
       });
     </script>
-  <?php endif; ?>  
+  <?php endif; ?>
 
   <?php if ($menu == 'jasa') : ?>
     <script src="<?= base_url('assets/scripts/jasa.js') ?>"></script>
@@ -138,13 +141,42 @@
   <?php if ($menu == 'jasa_paguyuban') : ?>
     <script src="<?= base_url('assets/scripts/jasa.paguyuban.js') ?>"></script>
   <?php endif; ?>
-  
+
   <?php if ($menu == 'transaksi') : ?>
     <script src="<?= base_url('assets/scripts/transaksi.js') ?>"></script>
   <?php endif; ?>
-  
+
+  <?php if ($menu == 'transaksi_paguyuban') : ?>
+    <script src="<?= base_url('assets/scripts/transaksi.paguyuban.js') ?>"></script>
+  <?php endif; ?>
+
   <?php if ($menu == 'reservasi') : ?>
     <script src="<?= base_url('assets/scripts/reservasi.js') ?>"></script>
+  <?php endif; ?>
+
+  <?php if ($menu == 'reservasi_paguyuban') : ?>
+    <script src="<?= base_url('assets/scripts/reservasi.paguyuban.js') ?>"></script>
+    <script>
+      initCalendar();
+
+      <?php if ($paguyuban) : ?>
+        <?php foreach ($reservasi as $row) : ?>
+          <?php
+          $day = date('d', strtotime($row['tanggal_reservasi']));
+          $month = date('n', strtotime($row['tanggal_reservasi']));
+          $year = date('Y', strtotime($row['tanggal_reservasi']));
+          ?>
+          addEventToCalendar({
+            title: '<?= $row['username'] ?>',
+            year: <?= $year ?>,
+            month: <?= $month ?> - 1,
+            day: <?= $day ?>,
+            id: '<?= $row['id_reservasi'] ?>',
+            color: '<?= $row['status_reservasi'] == 0 ? '#dc3545' : '#28a745' ?>'            
+          });
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </script>
   <?php endif; ?>
   </body>
 

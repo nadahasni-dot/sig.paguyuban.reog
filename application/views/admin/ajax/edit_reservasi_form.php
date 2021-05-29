@@ -3,8 +3,8 @@
     <label for="pemesan">Pemesan</label>
     <select id="pemesan" name="id_user" class="form-control select2" style="width: 100%;" required>
         <option value="">Pilih Pemesan</option>
-        <?php foreach ($umum as $row) : ?>
-            <option <?= $reservasi['id_user'] == $row['id_user'] ? 'selected' : '' ?> value="<?= $row['id_user'] ?>"><?= $row['username'] ?></option>
+        <?php foreach ($umum as $row) : ?>        
+            <option <?= $row['id_user'] == $reservasi['id_user'] ? 'selected' : '' ?> value="<?= $row['id_user'] ?>"><?= $row['username'] ?></option>
         <?php endforeach; ?>
     </select>
 </div>

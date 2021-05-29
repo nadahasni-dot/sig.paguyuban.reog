@@ -5,12 +5,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Jasa</h1>
+                    <h1>Transaksi</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= base_url('paguyuban'); ?>">Beranda</a></li>
-                        <li class="breadcrumb-item active">Jasa</li>
+                        <li class="breadcrumb-item active">Transaksi</li>
                     </ol>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="col-12">
                     <div class="card card-outline card-info">
                         <div class="card-header">
-                            <h2 class="card-title">Daftar Jasa</h2>
+                            <h2 class="card-title">Daftar Transaksi</h2>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
@@ -44,46 +44,54 @@
                                     </div>
                                 </div>
                             <?php else : ?>
-                                <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modal-tambah"><i class="fas fa-plus mr-2"></i>Tambah Jasa</button>
-
                                 <table id="allPost" class="table table-bordered table-striped table-hover text-nowrap">
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Tanggal</th>
+                                            <th>User</th>
+                                            <th>Status</th>
+                                            <th>Nominal</th>
                                             <th>Jasa</th>
                                             <th>Paguyuban</th>
-                                            <th>Harga</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $no = 1;
-                                        foreach ($jasa as $row) :
+                                        foreach ($transaksi as $row) :
                                         ?>
                                             <tr>
                                                 <td class="align-middle"><?= $no++; ?></td>
                                                 <td class="align-middle">
-                                                    <p class="m-0"><a href="<?= $row['id_jasa']; ?>" class="h6 action-edit"><?= $row['nama_jasa']; ?></a></p>
+                                                    <p class="m-0"><a href="<?= $row['id_transaksi']; ?>" class="h6 action-edit"><?= date('d M Y', strtotime($row['tanggal_transaksi'])) ?></a></p>
                                                     <p class="m-0">
-                                                        <a href="<?= $row['id_jasa']; ?>" class="text-small text-danger action-edit">Edit</a> |
-                                                        <a href="<?= base_url('paguyuban/deletejasa/') . $row['id_jasa']; ?>" class="text-small text-danger action-delete">Hapus</a>
+                                                        <a href="<?= $row['id_transaksi']; ?>" class="text-small text-danger action-edit">Edit</a> |
+                                                        <a href="<?= base_url('paguyuban/deletetransaksi/') . $row['id_transaksi']; ?>" class="text-small text-danger action-delete">Hapus</a>
                                                     </p>
                                                 </td>
+                                                <td class="align-middle"><?= $row['username']; ?></td>
+                                                <td class="align-middle"><?= $row['status_transaksi'] == 0 ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi'; ?></td>
+                                                <td class="align-middle"><?= number_format($row['nominal_transaksi']); ?></td>
+                                                <td class="align-middle"><?= $row['nama_jasa']; ?></td>
                                                 <td class="align-middle"><?= $row['nama_paguyuban']; ?></td>
-                                                <td class="align-middle"><?= number_format($row['harga_jasa']); ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>No</th>
+                                            <th>Tanggal</th>
+                                            <th>User</th>
+                                            <th>Status</th>
+                                            <th>Nominal</th>
                                             <th>Jasa</th>
                                             <th>Paguyuban</th>
-                                            <th>Harga</th>
                                         </tr>
                                     </tfoot>
                                 </table>
                             <?php endif; ?>
+
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -104,31 +112,43 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Jasa</h4>
+                    <h4 class="modal-title">Tambah Reservasi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id_paguyuban" value="<?= $paguyuban['id_paguyuban'] ?>">
                     <div class="form-group">
-                        <label for="namaJasaAdd">Nama Jasa</label>
-                        <input id="namaJasaAdd" type="text" class="form-control" name="nama_jasa" placeholder="Nama jasa baru" required>
+                        <label for="reservasiAdd">Reservasi</label>
+                        <select id="reservasiAdd" name="id_reservasi" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Reservasi</option>
+                            <?php foreach ($reservasi as $row) : ?>
+                                <option value="<?= $row['id_reservasi'] ?>"><?= $row['username'] . ' mereservasi ' . $row['nama_jasa'] . ' [' . $row['nama_paguyuban'] . ']' ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="deskripsiJasaAdd">Deskripsi Jasa</label>
-                        <textarea rows="5" cols="30" id="deskripsiJasaAdd" type="text" class="form-control" name="deskripsi_jasa" placeholder="Deskripsi jasa baru" required></textarea>
+                        <label for="tanggalAdd">Tanggal</label>
+                        <input id="tanggalAdd" type="date" class="form-control" name="tanggal_transaksi" placeholder="tanggal transaksi" required>
                     </div>
                     <div class="form-group">
-                        <label for="hargaJasaAdd">Harga Jasa</label>
-                        <input id="hargaJasaAdd" type="number" class="form-control" name="harga_jasa" placeholder="Harga" required>
+                        <label for="nominalAdd">Nominal</label>
+                        <input id="nominalAdd" type="number" class="form-control" name="nominal_transaksi" placeholder="nominal transaksi" required>
                     </div>
                     <div class="form-group">
-                        <label for="jasaImage">Jasa Foto</label>
+                        <label for="statusAdd">Status</label>
+                        <select id="statusAdd" name="status_transaksi" class="form-control select2" style="width: 100%;" required>
+                            <option selected value="">Pilih Status Reservasi</option>
+                            <option value="0">Belum Dikonfirmasi</option>
+                            <option value="1">Sudah Dikonfirmasi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="buktiImage">Bukti Transaksi</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="jasaImage" accept="image/x-png,image/gif,image/jpeg" name="foto_jasa" required>
-                            <label class="custom-file-label" for="jasaImage">Choose file</label>
-                            <img style="object-fit: cover; height: 100px; width: 150px;" width="150px" height="100px" src="" alt="jasa" id="jasaPreview" class="img-fluid mt-2 d-none">
+                            <input type="file" class="custom-file-input" id="buktiImage" accept="image/x-png,image/gif,image/jpeg" name="bukti_transaksi" required>
+                            <label class="custom-file-label" for="buktiImage">Choose file</label>
+                            <img style="object-fit: cover; height: 100px; width: 150px;" width="150px" height="100px" src="" alt="bukti" id="buktiPreview" class="img-fluid mt-2 d-none">
                         </div>
                     </div>
                 </div>
@@ -148,7 +168,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Edit Jasa</h4>
+                    <h4 class="modal-title">Edit Transaksi</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

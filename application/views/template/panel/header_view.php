@@ -34,6 +34,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>dist/css/adminlte.min.css">
   <!-- summernote -->
   <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>plugins/summernote/summernote-bs4.css">
+  <!-- fullCalendar -->
+  <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>plugins/fullcalendar/main.css">
   <!-- leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
   <!-- Google Font: Source Sans Pro -->

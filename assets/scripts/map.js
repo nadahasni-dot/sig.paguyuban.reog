@@ -5,7 +5,7 @@ const options = {
 	jember: {
 		lat: -8.168885,
 		lng: 113.702228,
-		zoom: 12,
+		zoom: 11,
 	},
 	jti: {
 		lat: -8.157628,
@@ -133,7 +133,7 @@ function handleClickToEditMarker({lat, lng, name, alamat, idPaguyuban}) {
 	markers.addTo(map);
 
 	map.panTo(marker.getLatLng());
-	
+
 	map.on('click', addMarkerToMapForm);
 }
 

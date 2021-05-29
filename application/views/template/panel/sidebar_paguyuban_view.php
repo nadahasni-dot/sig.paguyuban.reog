@@ -51,19 +51,27 @@
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('paguyuban/reservasi'); ?>" class="nav-link <?= $menu == 'reservasi' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/reservasi'); ?>" class="nav-link <?= $menu == 'reservasi_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
                 Reservasi
+
+                <?php if ($count_unconfirmed_reservasi > 0) : ?>
+                  <span class="right badge badge-danger"><?= $count_unconfirmed_reservasi ?></span>
+                <?php endif; ?>
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="<?= base_url('paguyuban/transaksi'); ?>" class="nav-link <?= $menu == 'transaksi' ? 'active' : '' ?>">
+            <a href="<?= base_url('paguyuban/transaksi'); ?>" class="nav-link <?= $menu == 'transaksi_paguyuban' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-wallet"></i>
               <p>
                 Transaksi
+
+                <?php if ($count_unconfirmed_transaksi > 0) : ?>
+                  <span class="right badge badge-danger"><?= $count_unconfirmed_transaksi ?></span>
+                <?php endif; ?>
               </p>
             </a>
           </li>

@@ -32,6 +32,14 @@ class Paguyuban extends CI_Controller
         $data['all_paguyuban'] = $this->Paguyuban_model->getPaguyuban('all');
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
 
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
+
+        if ($data['paguyuban']) {
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
+
         if (!$data['paguyuban']) { // jika data paguyuban belum diisi
             $data['count_jasa'] = 0;
             $data['count_reservasi'] = 0;
@@ -62,6 +70,14 @@ class Paguyuban extends CI_Controller
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
+
+        if ($data['paguyuban']) {
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
 
         // validation forms                        
         $this->form_validation->set_rules('nama_paguyuban', 'Nama Paguyuban', 'required|trim');
@@ -179,6 +195,8 @@ class Paguyuban extends CI_Controller
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
+        $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+        $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
 
         // validation forms                        
         $this->form_validation->set_rules('nama_paguyuban', 'Nama Paguyuban', 'required|trim');
@@ -252,9 +270,13 @@ class Paguyuban extends CI_Controller
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
         $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
 
         if ($data['paguyuban']) {
             $data['jasa'] = $this->Jasa_model->getJasa('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
         }
 
         // validation forms                
@@ -360,6 +382,151 @@ class Paguyuban extends CI_Controller
     }
     // * halaman jasa ===================================================================================
 
+    // * halaman reservasi ===================================================================================
+    public function reservasi()
+    {
+        $data['title'] = "Reservasi";
+        $data['menu'] = "reservasi_paguyuban";
+        $data['sub_menu'] = null;
+        $data['sub_menu_action'] = null;
+        // user data        
+        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
+
+        if ($data['paguyuban']) {
+            $data['reservasi'] = $this->Reservasi_model->getReservasi('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['jasa'] = $this->Jasa_model->getJasa('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
+
+        // validation forms                                
+        $this->form_validation->set_rules('status_reservasi', 'Status Reservasi', 'required|trim|numeric');
+
+        if ($this->form_validation->run() == FALSE) { // * jika belum input form
+            $this->load->view('template/panel/header_view', $data);
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/reservasi_paguyuban_view');
+            $this->load->view('template/panel/control_view');
+            $this->load->view('template/panel/footer_view');
+        } else { // * jika sudah input            
+            $id_reservasi = $this->input->post('id_reservasi');
+            $status_reservasi = $this->input->post('status_reservasi');
+
+            $data = array(
+                'status_reservasi' => $status_reservasi,
+                'reservasi_updated' => time(),
+            );
+
+            if ($this->Reservasi_model->updateReservasi('id_reservasi', $data, $id_reservasi)) { // * jika berhasil update reservasi
+                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah reservasi</div>');
+
+                redirect('paguyuban/reservasi');
+            } else { // ! jika gagal update reservasi
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah reservasi</div>');
+
+                redirect('paguyuban/reservasi');
+            }
+        }
+    }
+
+    // * untuk menampilkan detail reservasi
+    public function editReservasi($id_reservasi)
+    {
+        $data['reservasi'] = $this->Reservasi_model->getReservasi('id_reservasi', $id_reservasi);
+
+        $this->load->view('paguyuban/ajax/edit_reservasi_form', $data);
+    }
+
+    // * untuk menghapus reservasi
+    public function deleteReservasi($id_reservasi)
+    {
+        if ($this->Reservasi_model->deleteReservasi('id_reservasi', $id_reservasi)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus reservasi</div>');
+
+            redirect('paguyuban/reservasi');
+        } else { // ! jika gagal menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus reservasi</div>');
+
+            redirect('paguyuban/reservasi');
+        }
+    }
+    // * halaman reservasi ===================================================================================
+
+    // * halaman transaksi ===================================================================================
+    public function transaksi()
+    {
+        $data['title'] = "Transaksi";
+        $data['menu'] = "transaksi_paguyuban";
+        $data['sub_menu'] = null;
+        $data['sub_menu_action'] = null;
+        // user data        
+        $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
+
+        if ($data['paguyuban']) {
+            $data['transaksi'] = $this->Transaksi_model->getTransaksi('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
+
+        // validation forms                        
+        $this->form_validation->set_rules('status_transaksi', 'Status', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) { // * jika belum input form
+            $this->load->view('template/panel/header_view', $data);
+            $this->load->view('template/panel/sidebar_paguyuban_view');
+            $this->load->view('paguyuban/transaksi_paguyuban_view');
+            $this->load->view('template/panel/control_view');
+            $this->load->view('template/panel/footer_view');
+        } else { // * jika sudah input        
+            $id_transaksi = $this->input->post('id_transaksi');
+            $status_transaksi = $this->input->post('status_transaksi');
+
+            $data = array(
+                'status_transaksi' => $status_transaksi,
+                'transaksi_updated' => time(),
+            );
+
+            if ($this->Transaksi_model->updateTransaksi('id_transaksi', $data, $id_transaksi)) { // * jika berhasil update transaksi
+                $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah transaksi</div>');
+
+                redirect('paguyuban/transaksi');
+            } else { // ! jika gagal update transaksi
+                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah transaksi</div>');
+
+                redirect('paguyuban/transaksi');
+            }
+        }
+    }
+
+    // * untuk menampilkan detail transaksi
+    public function editTransaksi($id_transaksi)
+    {
+        $data['transaksi'] = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);        
+
+        $this->load->view('paguyuban/ajax/edit_transaksi_form', $data);
+    }
+
+    // * untuk menghapus transaksi
+    public function deleteTransaksi($id_transaksi)
+    {
+        if ($this->Transaksi_model->deleteTransaksi('id_transaksi', $id_transaksi)) { // * jika berhasil menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil menghapus transaksi</div>');
+
+            redirect('paguyuban/transaksi');
+        } else { // ! jika gagal menghapus
+            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menghapus transaksi</div>');
+
+            redirect('paguyuban/transaksi');
+        }
+    }
+    // * halaman transaksi ===================================================================================f
+
     // * halaman settings ===================================================================================
     public function settings()
     {
@@ -369,6 +536,16 @@ class Paguyuban extends CI_Controller
         $data['sub_menu_action'] = null;
         // user data        
         $data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+        $data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_user', $this->session->userdata('id_user'));
+        $data['count_unconfirmed_reservasi'] = 0;
+        $data['count_unconfirmed_transaksi'] = 0;
+
+        if ($data['paguyuban']) {
+            $data['reservasi'] = $this->Reservasi_model->getReservasi('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_reservasi'] = $this->Reservasi_model->countReservasi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['count_unconfirmed_transaksi'] = $this->Transaksi_model->countTransaksi('unconfirmed_paguyuban', $data['paguyuban']['id_paguyuban']);
+            $data['jasa'] = $this->Jasa_model->getJasa('all_paguyuban', $data['paguyuban']['id_paguyuban']);
+        }
 
         if ($this->input->post('update_action') == 'profile') {
             // config edit profil

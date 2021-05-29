@@ -40,6 +40,7 @@
                                         <th>Tanggal</th>
                                         <th>User</th>
                                         <th>Status</th>
+                                        <th>Nominal</th>
                                         <th>Jasa</th>
                                         <th>Paguyuban</th>
                                     </tr>
@@ -60,6 +61,7 @@
                                             </td>
                                             <td class="align-middle"><?= $row['username']; ?></td>
                                             <td class="align-middle"><?= $row['status_transaksi'] == 0 ? 'Belum Dikonfirmasi' : 'Sudah Dikonfirmasi'; ?></td>
+                                            <td class="align-middle"><?= number_format($row['nominal_transaksi']); ?></td>
                                             <td class="align-middle"><?= $row['nama_jasa']; ?></td>
                                             <td class="align-middle"><?= $row['nama_paguyuban']; ?></td>
                                         </tr>
@@ -71,6 +73,7 @@
                                         <th>Tanggal</th>
                                         <th>User</th>
                                         <th>Status</th>
+                                        <th>Nominal</th>
                                         <th>Jasa</th>
                                         <th>Paguyuban</th>
                                     </tr>

@@ -10,7 +10,7 @@ class Transaksi_model extends CI_Model
 
     public function getTransaksi($tipe, $param = NULL, $limit = NULL)
     {
-        $this->db->order_by('id_transaksi', 'ASC');
+        $this->db->order_by('tb_transaksi.status_transaksi', 'ASC');
 
         if ($limit != NULL) {
             $this->db->limit($limit);
@@ -24,8 +24,22 @@ class Transaksi_model extends CI_Model
             return $this->db->get('tb_transaksi')->result_array();
         }
 
+        if ($tipe == 'all_paguyuban') {
+            $this->db->where('tb_reservasi.id_paguyuban', $param);
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            $this->db->join('tb_user', 'tb_user.id_user = tb_reservasi.id_user');
+            $this->db->join('tb_jasa', 'tb_jasa.id_jasa = tb_reservasi.id_jasa');
+            $this->db->join('tb_paguyuban', 'tb_paguyuban.id_paguyuban = tb_reservasi.id_paguyuban');
+            return $this->db->get('tb_transaksi')->result_array();
+        }
+
         if ($tipe == 'id_transaksi') {
-            return $this->db->get_where('tb_transaksi', ['id_transaksi' => $param])->row_array();
+            $this->db->where('tb_transaksi.id_transaksi', $param);
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            $this->db->join('tb_user', 'tb_user.id_user = tb_reservasi.id_user');
+            $this->db->join('tb_jasa', 'tb_jasa.id_jasa = tb_reservasi.id_jasa');
+            $this->db->join('tb_paguyuban', 'tb_paguyuban.id_paguyuban = tb_reservasi.id_paguyuban');
+            return $this->db->get('tb_transaksi')->row_array();
         }
     }
 
@@ -43,7 +57,8 @@ class Transaksi_model extends CI_Model
         }
     }
 
-    public function countTransaksi($tipe, $param = NULL) {
+    public function countTransaksi($tipe, $param = NULL)
+    {
         if ($tipe == 'confirmed') {
             $this->db->where('status_transaksi', 1);
             return $this->db->count_all_results('tb_transaksi');
@@ -53,6 +68,13 @@ class Transaksi_model extends CI_Model
             $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
             $this->db->where('tb_reservasi.id_paguyuban', $param);
             $this->db->where('tb_transaksi.status_transaksi', 1);
+            return $this->db->count_all_results('tb_transaksi');
+        }
+
+        if ($tipe == 'unconfirmed_paguyuban') {
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            $this->db->where('tb_reservasi.id_paguyuban', $param);
+            $this->db->where('tb_transaksi.status_transaksi', 0);
             return $this->db->count_all_results('tb_transaksi');
         }
 
