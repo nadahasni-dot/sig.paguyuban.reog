@@ -20,6 +20,21 @@ class Paguyuban_model extends CI_Model
             return $this->db->get('tb_paguyuban')->result_array();
         }
 
+        if ($tipe == 'all_home') {
+            $this->db->select('tb_paguyuban.*, COUNT(tb_jasa.id_jasa) as count_jasa');
+            $this->db->group_by('tb_paguyuban.id_paguyuban');
+            $this->db->join('tb_jasa', 'tb_jasa.id_paguyuban = tb_paguyuban.id_paguyuban');
+            return $this->db->get('tb_paguyuban')->result_array();
+        }
+
+        if ($tipe == 'all_home_query') {
+            $this->db->select('tb_paguyuban.*, COUNT(tb_jasa.id_jasa) as count_jasa');
+            $this->db->like('tb_paguyuban.nama_paguyuban', $param);
+            $this->db->group_by('tb_paguyuban.id_paguyuban');
+            $this->db->join('tb_jasa', 'tb_jasa.id_paguyuban = tb_paguyuban.id_paguyuban');
+            return $this->db->get('tb_paguyuban')->result_array();
+        }
+
         if ($tipe == 'id_paguyuban') {
             return $this->db->get_where('tb_paguyuban', ['id_paguyuban' => $param])->row_array();
         }

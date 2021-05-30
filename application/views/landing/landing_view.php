@@ -6,7 +6,7 @@
                 <div class="bradcam_text text-center">
                     <h3>Reog Jember</h3>
                     <p>Cari dan temukan persebaran Paguyuban Reog di Kabupaten Jember</p>
-                    <a href="<?= base_url('paguyuban') ?>" class="boxed-btn3 mt-3">Cari</a>
+                    <a href="<?= base_url('daftarpaguyuban') ?>" class="boxed-btn3 mt-3">Cari</a>
                 </div>
             </div>
         </div>
@@ -52,18 +52,31 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="single_destination">
-                    <div class="thumb">
-                        <img src="<?= base_url('assets/landing/') ?>img/destination/1.png" alt="">
-                    </div>
-                    <div class="content">
-                        <p class="d-flex align-items-center">Italy <a href="travel_destination.html"> 07 Places</a> </p>
-
+            <?php
+            $no = 1;
+            foreach ($paguyuban as $row) :
+            ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_destination">
+                        <div class="thumb">
+                            <img style="max-height: 300px; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="<?= $row['nama_paguyuban'] ?>">
+                        </div>
+                        <div class="content">
+                            <a href="<?= base_url('detailpaguyuban/') . $row['id_paguyuban'] ?>">
+                                <p><?= $row['nama_paguyuban'] ?></p>
+                            </a>
+                            <p><a class="m-0" href="<?= base_url('detailpaguyuban/') . $row['id_paguyuban'] ?>"><?= $row['count_jasa'] ?> Jasa</a></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
+            <?php
+                if ($no > 6) {
+                    break;
+                }
+                $no++;
+            endforeach;
+            ?>
+            <!-- <div class="col-lg-4 col-md-6">
                 <div class="single_destination">
                     <div class="thumb">
                         <img src="<?= base_url('assets/landing/') ?>img/destination/2.png" alt="">
@@ -117,11 +130,25 @@
 
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
 <!-- popular_destination_area_end  -->
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="section_title text-center mb_70">
+                <h3>Persebaran Paguyuban Reog</h3>
+                <p>Berikut adalah persebaran lokasi paguyuban reog yang terdaftar pada sistem</p>
+            </div>
+        </div>
+        <div id="map" style="width: 100%; height: 400px;"></div>
+    </div>
+</div>
+
 
 <!-- newletter_area_start  -->
 <div class="newletter_area overlay">
@@ -133,7 +160,7 @@
                         <div class="newsletter_text text-center">
                             <h4>Daftarkan Diri Anda</h4>
                             <p>Daftarkan diri anda untuk melakukan reservasi atau daftarkan Paguyuban Reog Anda untuk membuka reservasi</p>
-                            <a class="boxed-btn4 mt-3" href="<?= base_url('auth/register') ?>" type="submit">Daftar</a>
+                            <a class="boxed-btn4 mt-3" href="<?= base_url('auth/registration') ?>" type="submit">Daftar</a>
                         </div>
                     </div>
                 </div>
@@ -142,20 +169,3 @@
     </div>
 </div>
 <!-- newletter_area_end  -->
-
-<div class="video_area video_bg overlay">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="video_wrap text-center">
-                    <h3>Enjoy Video</h3>
-                    <div class="video_icon">
-                        <a class="popup-video video_play_button" href="https://www.youtube.com/watch?v=f59dDEk57i0">
-                            <i class="fa fa-play"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>

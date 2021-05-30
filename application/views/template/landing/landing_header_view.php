@@ -24,10 +24,11 @@
   <link rel="stylesheet" href="<?= base_url('assets/landing/') ?>css/animate.css">
   <link rel="stylesheet" href="<?= base_url('assets/landing/') ?>css/slick.css">
   <link rel="stylesheet" href="<?= base_url('assets/landing/') ?>css/slicknav.css">
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
-
+  <!-- fullCalendar -->
+  <!-- <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>plugins/fullcalendar/main.css">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"> -->
   <!-- leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />  
 
   <link rel="stylesheet" href="<?= base_url('assets/landing/') ?>css/style.css">
   <!-- <link rel="stylesheet" href="css/responsive.css"> -->
@@ -76,17 +77,20 @@
               </div>
               <div class="col-xl-4 col-lg-4 d-none d-lg-block">
                 <div class="social_wrap d-flex align-items-center justify-content-end">
-                  <div class="number">
+                  <!-- <div class="number">
                     <p> <i class="fa fa-phone"></i> 10(256)-928 256</p>
                   </div>
                   <div class="social_links d-none d-xl-block">
-                    <ul>
-                      <li><a href="#"> <i class="fa fa-instagram"></i> </a></li>
+                    
+                      <ul>
+                        <li><a href="">Test</a></li>
+                        <li><a href="#"> <i class="fa fa-instagram"></i> </a></li>
                       <li><a href="#"> <i class="fa fa-linkedin"></i> </a></li>
                       <li><a href="#"> <i class="fa fa-facebook"></i> </a></li>
                       <li><a href="#"> <i class="fa fa-google-plus"></i> </a></li>
-                    </ul>
-                  </div>
+                      </ul>
+                    
+                  </div> -->
                 </div>
               </div>
               <div class="seach_icon">

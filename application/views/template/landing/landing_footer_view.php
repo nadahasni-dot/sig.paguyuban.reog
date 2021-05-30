@@ -139,10 +139,12 @@
 <div class="modal fade custom_search_pop" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="serch_form">
-                <input type="text" placeholder="Search">
-                <button type="submit">search</button>
-            </div>
+            <form action="<?= base_url('daftarpaguyuban') ?>" method="get">
+                <div class="serch_form">
+                    <input name="query" type="text" placeholder="Search">
+                    <button type="submit">search</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -167,8 +169,6 @@
 <script src="<?= base_url('assets/landing/') ?>js/gijgo.min.js"></script>
 <script src="<?= base_url('assets/landing/') ?>js/slick.min.js"></script>
 
-
-
 <!--contact js-->
 <script src="<?= base_url('assets/landing/') ?>js/contact.js"></script>
 <script src="<?= base_url('assets/landing/') ?>js/jquery.ajaxchimp.min.js"></script>
@@ -176,11 +176,11 @@
 <script src="<?= base_url('assets/landing/') ?>js/jquery.validate.min.js"></script>
 <script src="<?= base_url('assets/landing/') ?>js/mail-script.js"></script>
 
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 <!-- map -->
 <script src="<?= base_url('assets/scripts/globals.js') ?>"></script>
 <script src="<?= base_url('assets/scripts/map.js') ?>"></script>
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
 <script src="<?= base_url('assets/landing/') ?>js/main.js"></script>
 <script>
@@ -195,6 +195,36 @@
 <script>
     initMapContact();
 </script>
+
+<?php if ($page == 'home') : ?>
+    <script>
+        initMap();
+        <?php foreach ($paguyuban as $row) : ?>
+        addMarker({
+          lat: <?= $row['lat_paguyuban'] ?>,
+          lng: <?= $row['lng_paguyuban'] ?>,
+          idPaguyuban: <?= $row['id_paguyuban'] ?>,
+          name: '<?= $row['nama_paguyuban'] ?>',
+          alamat: '<?= $row['alamat_paguyuban'] ?>'
+        });
+      <?php endforeach; ?>
+    </script>
+<?php endif; ?>
+
+<?php if ($page == 'daftarpaguyuban') : ?>
+    <script>
+        initMap();
+        <?php foreach ($paguyuban as $row) : ?>
+        addMarker({
+          lat: <?= $row['lat_paguyuban'] ?>,
+          lng: <?= $row['lng_paguyuban'] ?>,
+          idPaguyuban: <?= $row['id_paguyuban'] ?>,
+          name: '<?= $row['nama_paguyuban'] ?>',
+          alamat: '<?= $row['alamat_paguyuban'] ?>'
+        });
+      <?php endforeach; ?>
+    </script>
+<?php endif; ?>
 </body>
 
 </html>
