@@ -17,7 +17,7 @@ class Reservasi_model extends CI_Model
         }
 
         if ($tipe == 'all') {
-            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated');
+            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated, tb_paguyuban.no_rekening, tb_paguyuban.pemilik_rekening');
             $this->db->join('tb_user', 'tb_reservasi.id_user = tb_user.id_user');
             $this->db->join('tb_paguyuban', 'tb_reservasi.id_paguyuban = tb_paguyuban.id_paguyuban');
             $this->db->join('tb_jasa', 'tb_reservasi.id_jasa = tb_jasa.id_jasa');
@@ -25,7 +25,7 @@ class Reservasi_model extends CI_Model
         }
 
         if ($tipe == 'all_paguyuban') {
-            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated');
+            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated, tb_paguyuban.no_rekening, tb_paguyuban.pemilik_rekening');
             $this->db->order_by('tb_reservasi.status_reservasi', 'ASC');
             $this->db->where('tb_paguyuban.id_paguyuban', $param);
             $this->db->join('tb_user', 'tb_reservasi.id_user = tb_user.id_user');
@@ -35,15 +35,20 @@ class Reservasi_model extends CI_Model
         }
 
         if ($tipe == 'id_reservasi') {
-            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated');
+            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated, tb_paguyuban.no_rekening, tb_paguyuban.pemilik_rekening');
             $this->db->join('tb_user', 'tb_reservasi.id_user = tb_user.id_user');
             $this->db->join('tb_paguyuban', 'tb_reservasi.id_paguyuban = tb_paguyuban.id_paguyuban');
             $this->db->join('tb_jasa', 'tb_reservasi.id_jasa = tb_jasa.id_jasa');
             return $this->db->get_where('tb_reservasi', ['id_reservasi' => $param])->row_array();
         }
 
-        if ($tipe == 'id_penyakit') {
-            return $this->db->get_where('tb_reservasi', ['id_penyakit' => $param])->result_array();
+        if ($tipe == 'id_user') {
+            $this->db->select('tb_user.*, tb_jasa.*, tb_reservasi.*, tb_paguyuban.nama_paguyuban, tb_paguyuban.deskripsi_paguyuban, tb_paguyuban.alamat_paguyuban, tb_paguyuban.telepon_paguyuban, tb_paguyuban.foto_paguyuban, tb_paguyuban.lat_paguyuban, tb_paguyuban.lng_paguyuban, tb_paguyuban.paguyuban_created, tb_paguyuban.paguyuban_updated, tb_paguyuban.no_rekening, tb_paguyuban.pemilik_rekening');
+            $this->db->order_by('tb_reservasi.reservasi_created', 'DESC');
+            $this->db->join('tb_user', 'tb_reservasi.id_user = tb_user.id_user');
+            $this->db->join('tb_paguyuban', 'tb_reservasi.id_paguyuban = tb_paguyuban.id_paguyuban');
+            $this->db->join('tb_jasa', 'tb_reservasi.id_jasa = tb_jasa.id_jasa');
+            return $this->db->get_where('tb_reservasi', ['tb_reservasi.id_user' => $param])->result_array();
         }
     }
 
@@ -57,11 +62,12 @@ class Reservasi_model extends CI_Model
     public function deleteReservasi($tipe, $param = 'id_reservasi')
     {
         if ($tipe == 'id_reservasi') {
-            return $this->db->delete('tb_reservasi', ['id_reservasi' => $param]);        
+            return $this->db->delete('tb_reservasi', ['id_reservasi' => $param]);
         }
     }
 
-    public function countReservasi($tipe, $param = NULL) {
+    public function countReservasi($tipe, $param = NULL)
+    {
         if ($tipe == 'all') {
             return $this->db->count_all_results('tb_reservasi');
         }

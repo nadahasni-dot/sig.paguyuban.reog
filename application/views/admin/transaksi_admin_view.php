@@ -57,6 +57,9 @@
                                                 <p class="m-0">
                                                     <a href="<?= $row['id_transaksi']; ?>" class="text-small text-danger action-edit">Edit</a> |
                                                     <a href="<?= base_url('admin/deletetransaksi/') . $row['id_transaksi']; ?>" class="text-small text-danger action-delete">Hapus</a>
+                                                    <?php if ($row['status_transaksi'] == 1) : ?>
+                                                        | <a target="_blank" href="<?= base_url('cetakbukti/') . $row['id_transaksi']; ?>" class="text-small text-danger">Cetak</a>
+                                                    <?php endif; ?>
                                                 </p>
                                             </td>
                                             <td class="align-middle"><?= $row['username']; ?></td>
@@ -121,7 +124,7 @@
                     <div class="form-group">
                         <label for="nominalAdd">Nominal</label>
                         <input id="nominalAdd" type="number" class="form-control" name="nominal_transaksi" placeholder="nominal transaksi" required>
-                    </div>                    
+                    </div>
                     <div class="form-group">
                         <label for="statusAdd">Status</label>
                         <select id="statusAdd" name="status_transaksi" class="form-control select2" style="width: 100%;" required>

@@ -5,7 +5,7 @@ const options = {
 	jember: {
 		lat: -8.168885,
 		lng: 113.702228,
-		zoom: 11,
+		zoom: 10.5,
 	},
 	jti: {
 		lat: -8.157628,

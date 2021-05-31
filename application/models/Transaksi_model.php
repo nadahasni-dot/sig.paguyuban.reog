@@ -41,6 +41,12 @@ class Transaksi_model extends CI_Model
             $this->db->join('tb_paguyuban', 'tb_paguyuban.id_paguyuban = tb_reservasi.id_paguyuban');
             return $this->db->get('tb_transaksi')->row_array();
         }
+
+        if ($tipe == 'id_reservasi') {
+            $this->db->where('tb_transaksi.id_reservasi', $param);
+            $this->db->join('tb_reservasi', 'tb_reservasi.id_reservasi = tb_transaksi.id_reservasi');
+            return $this->db->get('tb_transaksi')->row_array();
+        }
     }
 
     public function updateTransaksi($tipe, $data, $param)

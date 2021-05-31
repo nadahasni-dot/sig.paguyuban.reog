@@ -86,6 +86,8 @@ class Paguyuban extends CI_Controller
         $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
         $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
         $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('no_rekening', 'No REKENING', 'required|trim|numeric');
+        $this->form_validation->set_rules('pemilik_rekening', 'Pemilik Rekening', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
@@ -102,6 +104,8 @@ class Paguyuban extends CI_Controller
             $telepon_paguyuban = $this->input->post('telepon_paguyuban');
             $lat_paguyuban = $this->input->post('lat_paguyuban');
             $lng_paguyuban = $this->input->post('lng_paguyuban');
+            $no_rekening = $this->input->post('no_rekening');
+            $pemilik_rekening = $this->input->post('pemilik_rekening');
 
             if ($submitType == 'Simpan') { // * jika simpan data
                 $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
@@ -128,6 +132,8 @@ class Paguyuban extends CI_Controller
                     'telepon_paguyuban' => $telepon_paguyuban,
                     'lat_paguyuban' => $lat_paguyuban,
                     'lng_paguyuban' => $lng_paguyuban,
+                    'no_rekening' => $no_rekening,
+                    'pemilik_rekening' => $pemilik_rekening,
                     'paguyuban_created' => time(),
                 );
 
@@ -137,48 +143,6 @@ class Paguyuban extends CI_Controller
                     redirect('paguyuban/paguyuban');
                 } else { // ! jika gagal input
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal menambahkan paguyuban</div>');
-
-                    redirect('paguyuban/paguyuban');
-                }
-            } else { // * jika edit data                
-                $id_paguyuban = $this->input->post('id_paguyuban');
-                $owner = $this->input->post('owner');
-                $paguyuban = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
-
-                if ($owner != $id_user) { // jika owner dirubah
-                    $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
-                    $user = $this->User_model->getUser('id_user', $id_user);
-                    if ($paguyuban) { // jika user telah memiliki paguyuban maka tidak boleh buat
-                        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' . $user['username'] . ' telah terdaftar pada paguyuban ' . $paguyuban['nama_paguyuban'] . '</div>');
-
-                        redirect('paguyuban/paguyuban');
-                    }
-                }
-
-                if ($_FILES['foto_paguyuban']['error'] != 4) {
-                    $foto_paguyuban = $this->upload_image('foto_paguyuban', './assets/img/paguyuban/');
-                } else {
-                    $foto_paguyuban = $paguyuban['foto_paguyuban'];
-                }
-
-                $data = array(
-                    'id_user' => $id_user,
-                    'nama_paguyuban' => $nama_paguyuban,
-                    'deskripsi_paguyuban' => $deskripsi_paguyuban,
-                    'alamat_paguyuban' => $alamat_paguyuban,
-                    'foto_paguyuban' => $foto_paguyuban,
-                    'telepon_paguyuban' => $telepon_paguyuban,
-                    'lat_paguyuban' => $lat_paguyuban,
-                    'lng_paguyuban' => $lng_paguyuban,
-                    'paguyuban_updated' => time(),
-                );
-
-                if ($this->Paguyuban_model->updatePaguyuban('id_paguyuban', $data, $id_paguyuban)) { // * jika berhasil update
-                    $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil merubah paguyuban</div>');
-
-                    redirect('paguyuban/paguyuban');
-                } else { // ! jika gagal update paguyuban
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal merubah paguyuban</div>');
 
                     redirect('paguyuban/paguyuban');
                 }
@@ -205,6 +169,8 @@ class Paguyuban extends CI_Controller
         $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
         $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
         $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('no_rekening', 'No REKENING', 'required|trim|numeric');
+        $this->form_validation->set_rules('pemilik_rekening', 'Pemilik Rekening', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
@@ -222,6 +188,8 @@ class Paguyuban extends CI_Controller
             $telepon_paguyuban = $this->input->post('telepon_paguyuban');
             $lat_paguyuban = $this->input->post('lat_paguyuban');
             $lng_paguyuban = $this->input->post('lng_paguyuban');
+            $no_rekening = $this->input->post('no_rekening');
+            $pemilik_rekening = $this->input->post('pemilik_rekening');
 
             if ($submitType == 'Simpan') { // * jika simpan data
                 $paguyuban = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
@@ -242,6 +210,8 @@ class Paguyuban extends CI_Controller
                     'telepon_paguyuban' => $telepon_paguyuban,
                     'lat_paguyuban' => $lat_paguyuban,
                     'lng_paguyuban' => $lng_paguyuban,
+                    'no_rekening' => $no_rekening,
+                    'pemilik_rekening' => $pemilik_rekening,
                     'paguyuban_updated' => time(),
                 );
 
@@ -507,7 +477,7 @@ class Paguyuban extends CI_Controller
     // * untuk menampilkan detail transaksi
     public function editTransaksi($id_transaksi)
     {
-        $data['transaksi'] = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);        
+        $data['transaksi'] = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);
 
         $this->load->view('paguyuban/ajax/edit_transaksi_form', $data);
     }

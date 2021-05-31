@@ -28,6 +28,7 @@ class Jasa_model extends CI_Model
         }
 
         if ($tipe == 'id_jasa') {
+            $this->db->join('tb_paguyuban', 'tb_paguyuban.id_paguyuban = tb_jasa.id_paguyuban');
             return $this->db->get_where('tb_jasa', ['id_jasa' => $param])->row_array();
         }
 
@@ -46,11 +47,12 @@ class Jasa_model extends CI_Model
     public function deleteJasa($tipe, $param = 'id_jasa')
     {
         if ($tipe == 'id_jasa') {
-            return $this->db->delete('tb_jasa', ['id_jasa' => $param]);        
+            return $this->db->delete('tb_jasa', ['id_jasa' => $param]);
         }
     }
 
-    public function countJasa($tipe, $param = NULL) {
+    public function countJasa($tipe, $param = NULL)
+    {
         if ($tipe == 'all') {
             return $this->db->count_all_results('tb_jasa');
         }
@@ -59,5 +61,5 @@ class Jasa_model extends CI_Model
             $this->db->where('id_paguyuban', $param);
             return $this->db->count_all_results('tb_jasa');
         }
-    }    
+    }
 }

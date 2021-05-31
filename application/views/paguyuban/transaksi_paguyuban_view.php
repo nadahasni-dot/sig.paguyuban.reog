@@ -68,6 +68,9 @@
                                                     <p class="m-0">
                                                         <a href="<?= $row['id_transaksi']; ?>" class="text-small text-danger action-edit">Edit</a> |
                                                         <a href="<?= base_url('paguyuban/deletetransaksi/') . $row['id_transaksi']; ?>" class="text-small text-danger action-delete">Hapus</a>
+                                                        <?php if ($row['status_transaksi'] == 1) : ?>
+                                                            | <a target="_blank" href="<?= base_url('cetakbukti/') . $row['id_transaksi']; ?>" class="text-small text-danger">Cetak</a>
+                                                        <?php endif; ?>
                                                     </p>
                                                 </td>
                                                 <td class="align-middle"><?= $row['username']; ?></td>

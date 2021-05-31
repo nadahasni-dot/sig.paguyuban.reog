@@ -199,6 +199,8 @@ class Admin extends CI_Controller
         $this->form_validation->set_rules('telepon_paguyuban', 'Telepon', 'required|trim');
         $this->form_validation->set_rules('lat_paguyuban', 'Latitude', 'required|trim|numeric');
         $this->form_validation->set_rules('lng_paguyuban', 'Longitude', 'required|trim|numeric');
+        $this->form_validation->set_rules('no_rekening', 'No REKENING', 'required|trim|numeric');
+        $this->form_validation->set_rules('pemilik_rekening', 'Pemilik Rekening', 'required|trim');
 
         if ($this->form_validation->run() == FALSE) { // * jika belum input form
             $this->load->view('template/panel/header_view', $data);
@@ -215,6 +217,8 @@ class Admin extends CI_Controller
             $telepon_paguyuban = $this->input->post('telepon_paguyuban');
             $lat_paguyuban = $this->input->post('lat_paguyuban');
             $lng_paguyuban = $this->input->post('lng_paguyuban');
+            $no_rekening = $this->input->post('no_rekening');
+            $pemilik_rekening = $this->input->post('pemilik_rekening');
 
             if ($submitType == 'Tambah') { // * jika tambah data
                 $paguyuban = $this->Paguyuban_model->getPaguyuban('owner', $id_user);
@@ -241,6 +245,8 @@ class Admin extends CI_Controller
                     'telepon_paguyuban' => $telepon_paguyuban,
                     'lat_paguyuban' => $lat_paguyuban,
                     'lng_paguyuban' => $lng_paguyuban,
+                    'no_rekening' => $no_rekening,
+                    'pemilik_rekening' => $pemilik_rekening,
                     'paguyuban_created' => time(),
                 );
 
@@ -283,6 +289,8 @@ class Admin extends CI_Controller
                     'telepon_paguyuban' => $telepon_paguyuban,
                     'lat_paguyuban' => $lat_paguyuban,
                     'lng_paguyuban' => $lng_paguyuban,
+                    'no_rekening' => $no_rekening,
+                    'pemilik_rekening' => $pemilik_rekening,
                     'paguyuban_updated' => time(),
                 );
 

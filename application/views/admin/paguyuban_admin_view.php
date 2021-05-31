@@ -125,6 +125,20 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
+                                <label for="noRekeningAdd">No Rekening</label>
+                                <input id="noRekeningAdd" ype="text" class="form-control" name="no_rekening" placeholder="latitude" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="PemilikRekeningAdd">Pemilik Rekening</label>
+                                <input id="PemilikRekeningAdd" type="text" class="form-control" name="pemilik_rekening" placeholder="NAMA PEMILIK & JENIS BANK" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
                                 <label for="latitudeAdd">latitude</label>
                                 <input id="latitudeAdd" type="text" class="form-control" name="lat_paguyuban" placeholder="latitude" required>
                             </div>

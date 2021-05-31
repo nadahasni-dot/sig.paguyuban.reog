@@ -7,6 +7,10 @@
     <input type="text" id="pemesan" name="pemesan" value="<?= $reservasi['username'] ?>" class="form-control" style="width: 100%;" readonly />
 </div>
 <div class="form-group">
+    <label for="notelp">Telepon Pemesan</label>
+    <input type="text" id="notelp" name="telepon" value="<?= $reservasi['telepon_user'] ?>" class="form-control" style="width: 100%;" readonly />
+</div>
+<div class="form-group">
     <label for="namaJasa">Jasa</label>
     <input type="text" id="namaJasa" name="namajasa" value="<?= $reservasi['nama_jasa'] ?>" class="form-control" style="width: 100%;" readonly/>
 </div>

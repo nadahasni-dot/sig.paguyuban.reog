@@ -95,7 +95,11 @@
                                         <dt>Alamat</dt>
                                         <dd><?= $paguyuban['alamat_paguyuban'] ?></dd>
                                         <dt>Telepon</dt>
-                                        <dd><?= $paguyuban['telepon_paguyuban'] ?></dd>                                        
+                                        <dd><?= $paguyuban['telepon_paguyuban'] ?></dd>
+                                        <dt>Pemilik & Jenis Bank</dt>
+                                        <dd><?= $paguyuban['pemilik_rekening'] ?></dd>
+                                        <dt>No Rekening</dt>
+                                        <dd><?= $paguyuban['no_rekening'] ?></dd>
                                     </dl>
                                 </div>
                             </div>

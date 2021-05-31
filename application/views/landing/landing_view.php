@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row d-flex">
             <?php
             $no = 1;
             foreach ($paguyuban as $row) :
@@ -62,7 +62,7 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="single_destination">
                         <div class="thumb">
-                            <img style="max-height: 300px; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="<?= $row['nama_paguyuban'] ?>">
+                            <img style="max-height: 250px; width: 100%; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="<?= $row['nama_paguyuban'] ?>">
                         </div>
                         <div class="content">
                             <a href="<?= base_url('detailpaguyuban/') . $row['id_paguyuban'] ?>">
@@ -148,7 +148,7 @@
                 <p>Berikut adalah persebaran lokasi paguyuban reog yang terdaftar pada sistem</p>
             </div>
         </div>
-        <div id="map" style="width: 100%; height: 400px;"></div>
+        <div id="map" style="width: 100%; height: 400px; overflow: hidden; z-index: 0;"></div>
     </div>
 </div>
 

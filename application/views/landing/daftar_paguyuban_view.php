@@ -46,10 +46,10 @@
             <div class="col-lg-12">
                 <div class="row">
                     <?php foreach ($paguyuban as $row) : ?>
-                        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+                        <div class="col-lg-4 col-md-6">
                             <div class="single_place">
                                 <div class="thumb">
-                                    <img style="max-height: 200px; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="">
+                                    <img style="max-height: 250px; width: 100%; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="">
                                 </div>
                                 <div class="place_info">
                                     <a href="<?= base_url('detailpaguyuban/') . $row['id_paguyuban'] ?>">
@@ -86,7 +86,7 @@
                 <p>Berikut adalah persebaran lokasi paguyuban reog yang terdaftar pada sistem</p>
             </div>
         </div>
-        <div id="map" style="width: 100%; height: 400px;"></div>
+        <div id="map" style="width: 100%; height: 400px; overflow: hidden; z-index: 0;"></div>
     </div>
 </div>
 

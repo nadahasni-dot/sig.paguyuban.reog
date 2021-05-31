@@ -29,7 +29,7 @@
     <label for="buktiImageEdit">Bukti Transaksi</label>
     <small class="text-info">biarkan kosong jika tidak ingin merubah gambar</small>
     <div class="custom-file">
-        <input type="file" class="custom-file-input" id="buktiImageEdit" accept="image/x-png,image/gif,image/jpeg" name="bukti_transaksi" required>
+        <input type="file" class="custom-file-input" id="buktiImageEdit" accept="image/x-png,image/gif,image/jpeg" name="bukti_transaksi">
         <label class="custom-file-label" for="buktiImageEdit">Choose file</label>
         <img style="object-fit: cover; height: 100px; width: 150px;" width="150px" height="100px" src="" alt="bukti" id="buktiPreviewEdit" class="img-fluid mt-2 d-none">
     </div>

@@ -50,6 +50,20 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
+                                            <label for="noRekening">No Rekening</label>
+                                            <input id="noRekening" value="<?= $paguyuban['no_rekening']; ?>" ype="text" class="form-control" name="no_rekening" placeholder="latitude" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="PemilikRekening">Pemilik Rekening</label>
+                                            <input id="PemilikRekening" value="<?= $paguyuban['pemilik_rekening']; ?>" type="text" class="form-control" name="pemilik_rekening" placeholder="NAMA PEMILIK & JENIS BANK" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
                                             <label for="latitudeAdd">latitude</label>
                                             <input id="latitudeAdd" type="text" value="<?= $paguyuban['lat_paguyuban'] ?>" class="form-control" name="lat_paguyuban" placeholder="latitude" required>
                                         </div>
