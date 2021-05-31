@@ -89,6 +89,7 @@ function initMapSingleMarker(lat, lng, name, alamat) {
 
 	let jtiMarker = L.marker([lat, lng]).addTo(map);
 	jtiMarker.bindPopup(`<b>${name}</b><br>${alamat}`).openPopup();
+	jtiMarker.on("click", onMapClickMove);
 }
 
 function onMapClick(e) {
@@ -100,11 +101,15 @@ function onMapClickMove(e) {
 	map.panTo(e.latlng);
 }
 
-function addMarker({lat, lng, name, alamat, idPaguyuban}) {
+function addMarker({ lat, lng, name, alamat, idPaguyuban }) {
 	let marker = L.marker([lat, lng]);
-	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
-	
-	marker.on('click', onMapClickMove);
+	marker
+		.bindPopup(
+			`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`
+		)
+		.openPopup();
+
+	marker.on("click", onMapClickMove);
 	markers.addLayer(marker);
 	markers.addTo(map);
 }
@@ -116,25 +121,28 @@ function addMarkerToMapForm(e) {
 	markers.addLayer(marker);
 	markers.addTo(map);
 
-
-	$('#latitudeAdd').val(e.latlng.lat);
-	$('#longitudeAdd').val(e.latlng.lng);
+	$("#latitudeAdd").val(e.latlng.lat);
+	$("#longitudeAdd").val(e.latlng.lng);
 }
 
 function handleClickToAddMarker() {
-	map.on('click', addMarkerToMapForm);
+	map.on("click", addMarkerToMapForm);
 }
 
-function handleClickToEditMarker({lat, lng, name, alamat, idPaguyuban}) {
+function handleClickToEditMarker({ lat, lng, name, alamat, idPaguyuban }) {
 	let marker = L.marker([lat, lng]);
-	marker.bindPopup(`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`).openPopup();
+	marker
+		.bindPopup(
+			`<b>${name}</b><br>${alamat}<br><a target="_blank" href="${BASE_URL}/detailpaguyuban/${idPaguyuban}">View Paguyuban</a>`
+		)
+		.openPopup();
 
 	markers.addLayer(marker);
 	markers.addTo(map);
 
 	map.panTo(marker.getLatLng());
 
-	map.on('click', addMarkerToMapForm);
+	map.on("click", addMarkerToMapForm);
 }
 
 function clearAllMarkers() {

@@ -200,14 +200,14 @@
     <script>
         initMap();
         <?php foreach ($paguyuban as $row) : ?>
-        addMarker({
-          lat: <?= $row['lat_paguyuban'] ?>,
-          lng: <?= $row['lng_paguyuban'] ?>,
-          idPaguyuban: <?= $row['id_paguyuban'] ?>,
-          name: '<?= $row['nama_paguyuban'] ?>',
-          alamat: '<?= $row['alamat_paguyuban'] ?>'
-        });
-      <?php endforeach; ?>
+            addMarker({
+                lat: <?= $row['lat_paguyuban'] ?>,
+                lng: <?= $row['lng_paguyuban'] ?>,
+                idPaguyuban: <?= $row['id_paguyuban'] ?>,
+                name: '<?= $row['nama_paguyuban'] ?>',
+                alamat: '<?= $row['alamat_paguyuban'] ?>'
+            });
+        <?php endforeach; ?>
     </script>
 <?php endif; ?>
 
@@ -215,14 +215,25 @@
     <script>
         initMap();
         <?php foreach ($paguyuban as $row) : ?>
-        addMarker({
-          lat: <?= $row['lat_paguyuban'] ?>,
-          lng: <?= $row['lng_paguyuban'] ?>,
-          idPaguyuban: <?= $row['id_paguyuban'] ?>,
-          name: '<?= $row['nama_paguyuban'] ?>',
-          alamat: '<?= $row['alamat_paguyuban'] ?>'
-        });
-      <?php endforeach; ?>
+            addMarker({
+                lat: <?= $row['lat_paguyuban'] ?>,
+                lng: <?= $row['lng_paguyuban'] ?>,
+                idPaguyuban: <?= $row['id_paguyuban'] ?>,
+                name: '<?= $row['nama_paguyuban'] ?>',
+                alamat: '<?= $row['alamat_paguyuban'] ?>'
+            });
+        <?php endforeach; ?>
+    </script>
+<?php endif; ?>
+
+<?php if ($page == 'detailpaguyuban') : ?>
+    <script>
+        initMapSingleMarker(
+            <?= $paguyuban['lat_paguyuban'] ?>,
+            <?= $paguyuban['lng_paguyuban'] ?>,
+            '<?= $paguyuban['nama_paguyuban'] ?>',
+            '<?= $paguyuban['alamat_paguyuban'] ?>',
+        );
     </script>
 <?php endif; ?>
 </body>

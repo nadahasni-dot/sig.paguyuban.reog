@@ -73,25 +73,27 @@
     </div>
 </div>
 
-<!-- newletter_area_start  -->
-<div class="newletter_area overlay">
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-lg-10">
-                <div class="row align-items-center">
-                    <div class="col-12">
-                        <div class="newsletter_text text-center">
-                            <h4>Daftarkan Diri Anda</h4>
-                            <p>Daftarkan diri anda untuk melakukan reservasi atau daftarkan Paguyuban Reog Anda untuk membuka reservasi</p>
-                            <a class="boxed-btn4 mt-3" href="<?= base_url('auth/register') ?>" type="submit">Daftar</a>
+<?php if (!$this->session->userdata('id_user')) : ?>
+    <!-- newletter_area_start  -->
+    <div class="newletter_area overlay">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-10">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <div class="newsletter_text text-center">
+                                <h4>Daftarkan Diri Anda</h4>
+                                <p>Daftarkan diri anda untuk melakukan reservasi atau daftarkan Paguyuban Reog Anda untuk membuka reservasi</p>
+                                <a class="boxed-btn4 mt-3" href="<?= base_url('auth/registration') ?>" type="submit">Daftar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- newletter_area_end  -->
+    <!-- newletter_area_end  -->
+<?php endif; ?>
 
 <div class="video_area video_bg overlay">
     <div class="container">

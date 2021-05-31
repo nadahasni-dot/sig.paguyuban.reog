@@ -46,7 +46,7 @@
             <div class="col-lg-12">
                 <div class="row">
                     <?php foreach ($paguyuban as $row) : ?>
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                             <div class="single_place">
                                 <div class="thumb">
                                     <img style="max-height: 200px; object-fit: cover;" src="<?= base_url('assets/img/paguyuban/') . $row['foto_paguyuban'] ?>" alt="">
@@ -57,9 +57,9 @@
                                     </a>
                                     <p><?= $row['alamat_paguyuban'] ?></p>
                                     <div class="rating_days d-flex justify-content-between">
-                                        <span class="d-flex justify-content-center align-items-center">                                            
+                                        <span class="d-flex justify-content-center align-items-center">
                                             <a href="#">(<?= $row['count_jasa'] ?> Jasa)</a>
-                                        </span>                                        
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-            <div class="section_title text-center mb_70">
+            <div class="section_title text-center mb_70 mt-5">
                 <h3>Persebaran Paguyuban Reog</h3>
                 <p>Berikut adalah persebaran lokasi paguyuban reog yang terdaftar pada sistem</p>
             </div>
@@ -90,22 +90,24 @@
     </div>
 </div>
 
-<!-- newletter_area_start  -->
-<div class="newletter_area overlay">
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-lg-10">
-                <div class="row align-items-center">
-                    <div class="col-12">
-                        <div class="newsletter_text text-center">
-                            <h4>Daftarkan Diri Anda</h4>
-                            <p>Daftarkan diri anda untuk melakukan reservasi atau daftarkan Paguyuban Reog Anda untuk membuka reservasi</p>
-                            <a class="boxed-btn4 mt-3" href="<?= base_url('auth/register') ?>" type="submit">Daftar</a>
+<?php if (!$this->session->userdata('id_user')) : ?>
+    <!-- newletter_area_start  -->
+    <div class="newletter_area overlay">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-10">
+                    <div class="row align-items-center">
+                        <div class="col-12">
+                            <div class="newsletter_text text-center">
+                                <h4>Daftarkan Diri Anda</h4>
+                                <p>Daftarkan diri anda untuk melakukan reservasi atau daftarkan Paguyuban Reog Anda untuk membuka reservasi</p>
+                                <a class="boxed-btn4 mt-3" href="<?= base_url('auth/registration') ?>" type="submit">Daftar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- newletter_area_end  -->
+    <!-- newletter_area_end  -->
+<?php endif; ?>

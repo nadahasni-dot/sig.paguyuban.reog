@@ -28,7 +28,7 @@
   <!-- <link rel="stylesheet" href="<?= base_url('assets/adminlte/'); ?>plugins/fullcalendar/main.css">
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"> -->
   <!-- leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
 
   <link rel="stylesheet" href="<?= base_url('assets/landing/') ?>css/style.css">
   <!-- <link rel="stylesheet" href="css/responsive.css"> -->
@@ -70,7 +70,12 @@
                         </ul>
                       </li> -->
                       <li><a href="<?= base_url('contact') ?>">Contact</a></li>
-                      <li><a href="<?= base_url('auth') ?>">login</a></li>
+                      <?php if ($this->session->userdata('role') == 3) : ?>
+                        <li><a href="<?= base_url('reservasi') ?>">Reservasi</a></li>
+                        <li><a href="<?= base_url('logout') ?>">Logout</a></li>
+                      <?php else : ?>
+                        <li><a href="<?= base_url('auth') ?>">login</a></li>
+                      <?php endif; ?>
                     </ul>
                   </nav>
                 </div>

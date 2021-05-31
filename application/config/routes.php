@@ -63,4 +63,5 @@ $route['logout'] = 'auth/logout';
 // * rute hme
 $route['about'] = 'home/about';
 $route['daftarpaguyuban'] = 'home/daftarpaguyuban';
+$route['detailpaguyuban/(:num)'] = 'home/detailpaguyuban/$1';
 $route['contact'] = 'home/contact';

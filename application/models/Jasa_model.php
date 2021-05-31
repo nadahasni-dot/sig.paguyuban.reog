@@ -30,6 +30,10 @@ class Jasa_model extends CI_Model
         if ($tipe == 'id_jasa') {
             return $this->db->get_where('tb_jasa', ['id_jasa' => $param])->row_array();
         }
+
+        if ($tipe == 'id_paguyuban') {
+            return $this->db->get_where('tb_jasa', ['id_paguyuban' => $param])->result_array();
+        }
     }
 
     public function updateJasa($tipe, $data, $param)

@@ -68,7 +68,7 @@ class Auth extends CI_Controller
                     redirect('paguyuban');
                     break;
                 case 3:
-                    redirect('umum');
+                    redirect(base_url());
                 default:
             }
         }

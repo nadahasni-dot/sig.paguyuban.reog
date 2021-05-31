@@ -20,6 +20,10 @@ class Home extends CI_Controller
 		$data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all_home');
 		$data['page'] = 'home';
 
+		if ($this->session->userdata('id_user')) {
+			$data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+		}
+
 		$this->load->view('template/landing/landing_header_view', $data);
 		$this->load->view('landing/landing_view');
 		$this->load->view('template/landing/landing_footer_view');
@@ -30,6 +34,10 @@ class Home extends CI_Controller
 		$data['title'] = 'SIG PAGUYUBAN REOG | ABOUT';
 		$data['page'] = 'about';
 
+		if ($this->session->userdata('id_user')) {
+			$data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+		}
+
 		$this->load->view('template/landing/landing_header_view', $data);
 		$this->load->view('landing/about_view');
 		$this->load->view('template/landing/landing_footer_view');
@@ -39,6 +47,10 @@ class Home extends CI_Controller
 	{
 		$data['title'] = 'SIG PAGUYUBAN REOG | PAGUYUBAN';
 		$data['page'] = 'daftarpaguyuban';
+
+		if ($this->session->userdata('id_user')) {
+			$data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+		}
 
 		if (isset($_GET['query'])) {
 			$data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('all_home_query', $this->input->get('query'));
@@ -51,10 +63,31 @@ class Home extends CI_Controller
 		$this->load->view('template/landing/landing_footer_view');
 	}
 
+	public function detailPaguyuban($id_paguyuban) {		
+		$data['recomendation'] = $this->Paguyuban_model->getPaguyuban('all_home', NULL, 5);
+		$data['paguyuban'] = $this->Paguyuban_model->getPaguyuban('id_paguyuban', $id_paguyuban);
+		$data['jasa'] = $this->Jasa_model->getJasa('id_paguyuban', $id_paguyuban);
+
+		$data['title'] = strtoupper($data['paguyuban']['nama_paguyuban']);
+		$data['page'] = 'detailpaguyuban';
+
+		if ($this->session->userdata('id_user')) {
+			$data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+		}
+
+		$this->load->view('template/landing/landing_header_view', $data);
+		$this->load->view('landing/detail_paguyuban_view');
+		$this->load->view('template/landing/landing_footer_view');
+	}
+
 	public function contact()
 	{
 		$data['title'] = 'SIG PAGUYUBAN REOG | CONTACT';
 		$data['page'] = 'contact';
+
+		if ($this->session->userdata('id_user')) {
+			$data['user'] = $this->User_model->getUser('id_user', $this->session->userdata('id_user'));
+		}
 
 		$this->load->view('template/landing/landing_header_view', $data);
 		$this->load->view('landing/contact_view');
