@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Bulan Mei 2021 pada 11.31
+-- Waktu pembuatan: 31 Bulan Mei 2021 pada 09.50
 -- Versi server: 10.4.17-MariaDB
 -- Versi PHP: 7.4.14
 
@@ -38,6 +38,14 @@ CREATE TABLE `tb_jasa` (
   `jasa_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `tb_jasa`
+--
+
+INSERT INTO `tb_jasa` (`id_jasa`, `id_paguyuban`, `nama_jasa`, `deskripsi_jasa`, `foto_jasa`, `harga_jasa`, `jasa_created`, `jasa_updated`) VALUES
+(8, 7, 'Pertunjukan Reog (REGULAR)', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi velit, culpa possimus eveniet fuga vero quos quia aspernatur facere optio ea, soluta vitae consequuntur quidem illo accusamus ut nostrum vel.', 'bbb2607cfca77f6c98bb44cfa67dbf96.jpg', 250000, 1622443809, 1622445533),
+(9, 8, 'Reog Panas Matahari', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi tempore omnis dolorem incidunt totam, fugiat recusandae illo error cumque enim. Ratione, consequuntur. Nostrum quis eius, provident eveniet veniam expedita repudiandae.', '8b233e6087d498397cc6ba2b0a49cd4e.jpg', 300000, 1622445035, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -54,6 +62,8 @@ CREATE TABLE `tb_paguyuban` (
   `foto_paguyuban` varchar(255) NOT NULL,
   `lat_paguyuban` double NOT NULL,
   `lng_paguyuban` double NOT NULL,
+  `no_rekening` varchar(20) NOT NULL,
+  `pemilik_rekening` varchar(255) NOT NULL,
   `paguyuban_created` int(11) NOT NULL,
   `paguyuban_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -62,8 +72,9 @@ CREATE TABLE `tb_paguyuban` (
 -- Dumping data untuk tabel `tb_paguyuban`
 --
 
-INSERT INTO `tb_paguyuban` (`id_paguyuban`, `id_user`, `nama_paguyuban`, `deskripsi_paguyuban`, `alamat_paguyuban`, `telepon_paguyuban`, `foto_paguyuban`, `lat_paguyuban`, `lng_paguyuban`, `paguyuban_created`, `paguyuban_updated`) VALUES
-(3, 4, 'Sanggar seni reog SINGO BROJO', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur imperdiet neque sed gravida cursus. Sed fringilla enim sit amet pharetra semper. Cras scelerisque, ante quis faucibus ornare, diam neque sodales tortor, quis luctus nisl metus fringilla nulla. Curabitur porta facilisis purus. Aliquam elementum ultrices maximus. Aliquam non consequat quam. Duis eros nibh, tristique vel varius ut, fringilla pellentesque tortor. Vestibulum maximus et risus cursus varius. Donec dignissim ipsum a nunc volutpat, et malesuada tellus vestibulum. In hac habitasse platea dictumst. Pellentesque volutpat lorem sed tortor consequat, a feugiat felis commodo. Suspendisse aliquam, dui ut commodo bibendum, orci sem aliquam ante, et hendrerit lorem leo ut nulla. Mauris quis congue sem. Phasellus ultricies volutpat vestibulum.', 'Tegal Banteng, Kesilir, Wuluhan, Jember Regency, East Java 68162', '081234567890', 'e0037bb77295669076069be935f60e0f.jpg', -8.3462665, 113.5756993, 1622107669, NULL);
+INSERT INTO `tb_paguyuban` (`id_paguyuban`, `id_user`, `nama_paguyuban`, `deskripsi_paguyuban`, `alamat_paguyuban`, `telepon_paguyuban`, `foto_paguyuban`, `lat_paguyuban`, `lng_paguyuban`, `no_rekening`, `pemilik_rekening`, `paguyuban_created`, `paguyuban_updated`) VALUES
+(7, 4, 'Sanggar Seni Reog Ponorogo Sardulo Argo Saguno', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi velit, culpa possimus eveniet fuga vero quos quia aspernatur facere optio ea, soluta vitae consequuntur quidem illo accusamus ut nostrum vel.', 'Jl jalan boy', '0895387228138', 'ad244570d0882a098bd9072bdfe59aa7.jpg', -8.1579093598359, 113.71430307626726, '777222138821', 'Hasyim (BNI)', 1622443726, 1622445521),
+(8, 6, 'Reog Matahari', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptates facilis eveniet totam autem nam omnis beatae ducimus accusantium veniam inventore repellat, ullam libero at officiis dolores quaerat, eaque quis.', 'Jl diponegoro VII', '0895387228138', '8e7feb2e47020ab65bbc5bc9dd207ca7.jpg', -8.173329691598852, 113.69760364294055, '666123772182', 'HERi (BCA)', 1622444712, 1622445565);
 
 -- --------------------------------------------------------
 
@@ -82,6 +93,14 @@ CREATE TABLE `tb_reservasi` (
   `reservasi_created` int(11) NOT NULL,
   `reservasi_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `tb_reservasi`
+--
+
+INSERT INTO `tb_reservasi` (`id_reservasi`, `id_user`, `id_jasa`, `id_paguyuban`, `tanggal_reservasi`, `deskripsi_reservasi`, `status_reservasi`, `reservasi_created`, `reservasi_updated`) VALUES
+(9, 3, 8, 7, '2021-06-01', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi velit, culpa possimus eveniet fuga vero quos quia aspernatur facere optio ea, soluta vitae consequuntur quidem illo accusamus ut nostrum vel.', 1, 1622443907, 1622443975),
+(10, 3, 9, 8, '2021-06-01', 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi tempore omnis dolorem incidunt totam, fugiat recusandae illo error cumque enim. Ratione, consequuntur. Nostrum quis eius, provident eveniet veniam expedita repudiandae.', 1, 1622445121, 1622445222);
 
 -- --------------------------------------------------------
 
@@ -115,6 +134,13 @@ CREATE TABLE `tb_transaksi` (
   `transaksi_updated` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `tb_transaksi`
+--
+
+INSERT INTO `tb_transaksi` (`id_transaksi`, `id_reservasi`, `bukti_transaksi`, `tanggal_transaksi`, `nominal_transaksi`, `status_transaksi`, `transaksi_created`, `transaksi_updated`) VALUES
+(7, 9, 'be3ddba392729056a3adeb3b4593dd94.jpg', '2021-05-31', 250000, 1, 1622444267, 1622447365);
+
 -- --------------------------------------------------------
 
 --
@@ -139,9 +165,10 @@ CREATE TABLE `tb_user` (
 --
 
 INSERT INTO `tb_user` (`id_user`, `username`, `telepon_user`, `email`, `role`, `foto_user`, `status_user`, `password`, `user_created`, `user_updated`) VALUES
-(2, 'Admin Satu', '085735678159', 'nadasthing@gmail.com', 1, 'user-no-image.jpg', 1, '$2y$10$9mezwWpG01.nAPoUkKEvPO1Fa03NcEA0WEZdoazkiT2iglF.TvY52', 1621941297, NULL),
+(2, 'Admin Satu', '085735678159', 'NADASTHING@GMAIL.COM', 1, '249e51582e5b99ef4f3442913506554c.jpg', 1, '$2y$10$le6QX73fx7cdx0lfmCySAeWRugLM5G9OEoauNk8vSKcMQ14m/wmkC', 1621941297, 1622201107),
 (3, 'Umum 1', '081234567890', 'umum1@gmail.com', 3, 'user-no-image.jpg', 1, '$2y$10$tUL95YQqpYLUwLa1N2mheeHXeik9WapnZHJlDeKSvImXjk9A.nTlW', 1621943558, 1621944186),
-(4, 'Paguyuban 1', '089765432123', 'paguyuban@gmail.com', 2, 'user-no-image.jpg', 1, '$2y$10$ff//l6EG7pG0s/R0HHqqjOPlK2BimpdNw6CDqsBtVXSmuHkJMc.H6', 1621943628, 1621944175);
+(4, 'Paguyuban 1', '089765432123', 'PAGUYUBAN@GMAIL.COM', 2, '72c819736923f2c190e38823bcde8860.jpg', 1, '$2y$10$PgeI4RTyp4xeQRi2KIuYau87M3q8J4kYf8d2cfP16Wc4bqKod8bES', 1621943628, 1622205346),
+(6, 'Paguyuban 2', '081234567890', 'PAGUYUBAN2@GMAIL.COM', 2, '0a21ccf4458d7b638c5f17742f673232.jpg', 1, '$2y$10$nq2i6CGm5P2pY/oYplKRhOiShxx2ObTR1fcUr5Pgk8A4w2J6t5Wdm', 1622203301, 1622205505);
 
 --
 -- Indexes for dumped tables
@@ -198,19 +225,19 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT untuk tabel `tb_jasa`
 --
 ALTER TABLE `tb_jasa`
-  MODIFY `id_jasa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_jasa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_paguyuban`
 --
 ALTER TABLE `tb_paguyuban`
-  MODIFY `id_paguyuban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_paguyuban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_reservasi`
 --
 ALTER TABLE `tb_reservasi`
-  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_token`
@@ -222,13 +249,13 @@ ALTER TABLE `tb_token`
 -- AUTO_INCREMENT untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_user`
 --
 ALTER TABLE `tb_user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
