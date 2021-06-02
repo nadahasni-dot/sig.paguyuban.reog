@@ -2,7 +2,7 @@
     <div class="footer_top">
         <div class="container">
             <div class="row">
-                <div class="col-xl-4 col-md-6 col-lg-4 ">
+                <div class="col-md-6">
                     <div class="footer_widget">
                         <div class="footer_logo">
                             <a href="#">
@@ -13,7 +13,7 @@
                             <a href="#">+10 367 826 2567</a> <br>
                             <a href="#">contact@carpenter.com</a>
                         </p>
-                        <div class="socail_links">
+                        <!-- <div class="socail_links">
                             <ul>
                                 <li>
                                     <a href="#">
@@ -41,78 +41,9 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
-
+                        </div> -->
                     </div>
-                </div>
-                <div class="col-xl-2 col-md-6 col-lg-2">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Menu
-                        </h3>
-                        <ul class="links">
-                            <li><a href="<?= base_url('about') ?>">About</a></li>
-                            <li><a href="<?= base_url('paguyuban') ?>">Paguyuban</a></li>
-                            <li><a href="<?= base_url('contact') ?>">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 col-lg-3">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Paguyuban Populer
-                        </h3>
-                        <ul class="links double_links">
-                            <li><a href="#">Indonesia</a></li>
-                            <li><a href="#">America</a></li>
-                            <li><a href="#">India</a></li>
-                            <li><a href="#">Switzerland</a></li>
-                            <li><a href="#">Italy</a></li>
-                            <li><a href="#">Canada</a></li>
-                            <li><a href="#">Franch</a></li>
-                            <li><a href="#">England</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 col-lg-3">
-                    <div class="footer_widget">
-                        <h3 class="footer_title">
-                            Gallery
-                        </h3>
-                        <div class="instagram_feed">
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/1.png" alt="">
-                                </a>
-                            </div>
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/2.png" alt="">
-                                </a>
-                            </div>
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/3.png" alt="">
-                                </a>
-                            </div>
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/4.png" alt="">
-                                </a>
-                            </div>
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/5.png" alt="">
-                                </a>
-                            </div>
-                            <div class="single_insta">
-                                <a href="#">
-                                    <img src="<?= base_url('assets/landing/') ?>img/instagram/6.png" alt="">
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div>                         
             </div>
         </div>
     </div>
