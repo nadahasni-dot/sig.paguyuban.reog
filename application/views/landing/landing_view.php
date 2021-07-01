@@ -6,7 +6,8 @@
                 <div class="bradcam_text text-center">
                     <h3>Reog Jember</h3>
                     <p>Cari dan temukan persebaran Paguyuban Reog di Kabupaten Jember</p>
-                    <a href="<?= base_url('daftarpaguyuban') ?>" class="boxed-btn3 mt-3">Cari</a>
+                    <a href="<?= base_url('daftarpaguyuban') ?>" class="boxed-btn3 mt-3">Cari</a>                    
+                    <p class="mt-5">SISTEM INFORMASI GEOGRAFIS INI DAPAT MEMBANTU ANDA MENEMUKAN PAGUYUBAN REOG DI WILAYAH KABUPATEN JEMBER DAN MEMUDAHKAN ANDA UNTUK MELAKUKAN PEMESANAN PAGUYUBAN YANG ANDA INGINKAN</p>
                 </div>
             </div>
         </div>

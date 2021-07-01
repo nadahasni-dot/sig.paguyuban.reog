@@ -15,6 +15,7 @@
                         </ul>
                         <p class="excert"><?= $paguyuban['deskripsi_paguyuban']; ?></p>
                         <a style="color: white !important;" target="_blank" class="button primary-bg w-100 btn_1 boxed-btn text-white" href="https://wa.me/<?= 62 . ltrim($paguyuban['telepon_paguyuban'], '0') ?>?text=Saya%20tertarik%20dengan%20paguyuban%20Anda"><i class="fa fa-whatsapp mr-2"></i>Chat On Whats App (<?= $paguyuban['telepon_paguyuban']; ?>)</a>
+                        <a style="color: white !important;" target="_blank" class="button primary-bg w-100 btn_2 boxed-btn-location text-white mt-2" href="http://maps.google.com/maps?daddr=<?= $paguyuban['lat_paguyuban'] . "," . $paguyuban['lng_paguyuban'] ?>"><i class="fa fa-map-marker mr-2"></i>Menuju Lokasi</a>
                         <div id="map" style="width: 100%; height: 300px" class="mt-3 mb-3"></div>
                     </div>
                 </div>
