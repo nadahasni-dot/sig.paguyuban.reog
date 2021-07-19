@@ -270,9 +270,9 @@ class Auth extends CI_Controller
     {
         $config = [
             'protocol'      => 'smtp',
-            'smtp_host'     => 'step-ap.online',
-            'smtp_user'     => 'admin@step-ap.online',
-            'smtp_pass'     => 'Stepapon@2020',
+            'smtp_host'     => 'smtp.gmail.com',
+            'smtp_user'     => 'misbahussurur2020@gmail.com',
+            'smtp_pass'     => '',
             'smtp_port'     => 465,
             'mailtype'      => 'html',
             'charset'       => 'utf-8',
@@ -284,7 +284,7 @@ class Auth extends CI_Controller
         $this->load->library('email', $config);
         $this->email->initialize($config);
 
-        $this->email->from('admin-no-reply@sipakar.com', 'SIG PAGUYUBAN REOG');
+        $this->email->from('misbahussurur2020@gmail.com', 'SIG PAGUYUBAN REOG');
         $this->email->to($email);
 
         $message = $this->load->view('email/email_view.php', $data, true);

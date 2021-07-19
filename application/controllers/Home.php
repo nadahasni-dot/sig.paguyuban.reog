@@ -167,7 +167,7 @@ class Home extends CI_Controller
 			$this->load->view('template/landing/landing_header_view', $data);
 			$this->load->view('landing/detail_reservasi_view');
 			$this->load->view('template/landing/landing_footer_view');
-		} else {			
+		} else {
 			$tanggal_transaksi = $this->input->post('tanggal_transaksi');
 			$nominal_transaksi = $this->input->post('nominal_transaksi');
 
@@ -212,7 +212,33 @@ class Home extends CI_Controller
 		$this->load->view('template/landing/landing_footer_view');
 	}
 
-	public function cetakBukti($id_transaksi) {
+	public function sendemail()
+	{
+		$message = $this->input->post('message');
+		$name = $this->input->post('name');
+		$email = $this->input->post('email');
+		$subject = $this->input->post('subject');
+
+		// data untuk ditampilkan pada email
+		$data['title'] = $subject;
+		$data['heading'] = $subject;
+		$data['body'] = $message;
+		$data['to'] = $email;
+		$data['name'] = $name;
+
+		if($this->_sendEmail("misbahussurur2020@gmail.com", $data)) {
+			$this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Berhasil Mengirim Pesan</div>');
+
+			redirect('contact');
+		} else {
+			$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>Gagal Mengirim Pesan</div>');
+
+			redirect('contact');
+		}
+	}
+
+	public function cetakBukti($id_transaksi)
+	{
 		$data['transaksi'] = $this->Transaksi_model->getTransaksi('id_transaksi', $id_transaksi);
 		$data['reservasi'] = $this->Reservasi_model->getReservasi('id_reservasi', $data['transaksi']['id_reservasi']);
 
@@ -254,6 +280,41 @@ class Home extends CI_Controller
 			}
 		} else {
 			return 'no-image.jpg';
+		}
+	}
+
+	// * function untuk proses send email
+	private function _sendEmail($email, $data)
+	{
+		$config = [
+			'protocol'      => 'smtp',
+			'smtp_host'     => 'smtp.gmail.com',
+			'smtp_user'     => 'misbahussurur2020@gmail.com',
+			'smtp_pass'     => '',
+			'smtp_port'     => 465,
+			'mailtype'      => 'html',
+			'charset'       => 'utf-8',
+			'smtp_crypto'   => 'ssl',
+			'crlf'          => "\r\n",
+			'newline'       => "\r\n"
+		];
+
+		$this->load->library('email', $config);
+		$this->email->initialize($config);
+
+		$this->email->from($email, 'SIG PAGUYUBAN REOG');
+		$this->email->to($data['to']);
+
+		$message = $data['body'] . " from (" . $data['name'] . ")";
+
+		$this->email->subject($data['heading']);
+		$this->email->message($message);
+
+		if ($this->email->send()) {
+			return true;
+		} else {
+			echo $this->email->print_debugger();			
+			return false;
 		}
 	}
 }

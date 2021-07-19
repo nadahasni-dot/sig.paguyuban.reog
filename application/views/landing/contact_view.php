@@ -23,9 +23,10 @@
         <div class="row">
             <div class="col-12">
                 <h2 class="contact-title">Get in Touch</h2>
+                <?= $this->session->flashdata('message'); ?>
             </div>
             <div class="col-lg-8">
-                <form class="form-contact contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+                <form class="form-contact contact_form" action="<?= base_url('home/sendemail') ?>" method="post"  novalidate="novalidate">
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
